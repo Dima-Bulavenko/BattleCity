@@ -14,6 +14,9 @@
 ## Manual Testing
 
 
+### Browser Compatibility
+
+
 ### User Stories Testing
 
 
