@@ -1,4 +1,4 @@
-# Battle City 
+# *Battle City*
 
 *Created by:* <strong>8-Bit Alchemists</strong>
 
@@ -43,6 +43,8 @@ I used a flowchart to illustrate some of the main logical points before I began 
 ---
 
 ## Testing
+
+Please see [TESTING.md](TESTING.md) for a comprehensive list of tests performed.
 
 ---
 
