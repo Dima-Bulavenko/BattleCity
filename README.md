@@ -103,6 +103,10 @@ The live link can be found here - *INSERT LINK*
 
 ## Credits
 
+* [Freesound](https://freesound.org/) for sounds
+* [Favicon](https://favicon.io/) for favicon generation
+* [Flaticon](https://favicon.io/) for favicon image
+
 ### Code
 *REFERENCE ANY CODE COPIED FROM EXTERNAL SOURCES HERE*
 
