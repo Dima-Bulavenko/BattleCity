@@ -145,3 +145,41 @@ body {
 #phaser-game {
     animation: pixelate 0.5s ease-in;
 }
+
+#hud {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+}
+
+#health-bar-container {
+    width: 200px;
+    height: 20px;
+    background-color: #333;
+    border: 2px solid #fff;
+    padding: 2px;
+    margin-right: 20px;
+    image-rendering: pixelated; /* Ensures that images remain pixelated */
+}
+
+#health-bar {
+    width: 100%;
+    height: 100%;
+    background: repeating-linear-gradient(
+        45deg,
+        #ff0000, /* Start with red for full health */
+        #ff0000 10px,
+        #ff5a5a 10px,
+        #ff5a5a 20px
+    );
+    transition: width 0.3s ease; /* Smooth transition when health changes */
+    image-rendering: pixelated; /* Force pixelated rendering */
+}
+
+#score, #lives {
+    font-size: 16px;
+    margin-left: 10px;
+}
