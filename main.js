@@ -2,6 +2,13 @@ const config = {
     type: Phaser.AUTO,
     width: 800,
     height: 600,
+    parent: 'phaser-game',
+    scene: {
+        preload: preload,
+        create: create,
+        update: update
+    },
+    pixelArt: true, // For retro pixelated art style
     physics: {
         default: 'arcade',
         arcade: {
