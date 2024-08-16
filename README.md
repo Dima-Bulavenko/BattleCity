@@ -35,7 +35,11 @@ As a player I want to:
 
 ### Colour Scheme
 
-![Battle City Website Colour Palette](*ADD PATH FILE*)
+The following colours were generated from the [Battle City Spritsheet](assets/battle_city_spritesheet.png). We chose a selection of neutral, muted and strong colours. They accent the gaming environment with an array of contrasts available.
+
+![Battle City Neutral Colour Palette](docs/design/battle_city_neutral.png)
+![Battle City Muted Colour Palette](docs/design/battle_city_muted.png)
+![Battle City Strong Colour Palette](docs/design/battle_city_strong.png)
 
 
 ### Typography
@@ -75,6 +79,7 @@ Please see [TESTING.md](TESTING.md) for a comprehensive list of tests performed.
 
 ### Frameworks, Libraries & Programs
 
+- [Coolors](https://coolors.co/) - To create colour palettes.
 - [DevTools] - Testing & Troubleshooting
 - [GitHub](https://github.com/) - To store associated files & developments of the website.
 - [Gitpod](https://www.gitpod.io/) - IDE used.
