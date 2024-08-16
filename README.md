@@ -11,6 +11,13 @@
 
 ### User Stories
 
+As a player I want to:
+- See my tank interacting in the game environment
+- Control my tanks movements using arrow keys
+- Rotate my tank when changing directions
+- Fire bullets so I can defeat my opponent
+- See my score displayed on the screen so I can track my progress
+- See my how many lives I have remaining
 
 ---
 
@@ -28,14 +35,17 @@
 
 ### Colour Scheme
 
-![Battle City Website Colour Palette](*ADD PATH FILE*)
+The following colours were generated from the [Battle City Spritsheet](assets/battle_city_spritesheet.png) using [Coolors](https://coolors.co/). We chose a selection of neutral, muted and strong colours. They accent the gaming environment with an array of contrasts available.
+
+![Battle City Neutral Colour Palette](docs/design/battle_city_neutral.png)
+![Battle City Muted Colour Palette](docs/design/battle_city_muted.png)
+![Battle City Strong Colour Palette](docs/design/battle_city_strong.png)
 
 
 ### Typography
 
-Fonts were sourced from [Google Fonts](https://fonts.google.com/).
-
-*GIVE EXAMPLES & WHY YOU USED THEM*
+![Battle City Font](docs/fonts/battle_city_font.PNG)
+The [Press Start 2P](https://fonts.google.com/specimen/Press+Start+2P?preview.text=Welcome%20to%20Battle%20City&query=Press+Start+2P) font adds to the pixelated theme of the game. It adds some fun, and evokes a feeling of nostalgia. It is illustrative, yet has a structural integrity and readability to it. The user can get a clear sense of the design from this font.
 
 
 ### Imagery
@@ -46,8 +56,7 @@ Fonts were sourced from [Google Fonts](https://fonts.google.com/).
 
 ### Flowchart
 
-I used a flowchart to illustrate some of the main logical points before I began to code.
-![Battle City Flowchart](*LINK DOCUMENT*)
+- ![Game Layout](*LINK DOCUMENT*)
 
 ---
 
@@ -69,6 +78,7 @@ Please see [TESTING.md](TESTING.md) for a comprehensive list of tests performed.
 
 ### Frameworks, Libraries & Programs
 
+- [Coolors](https://coolors.co/) - To create colour palettes.
 - [DevTools] - Testing & Troubleshooting
 - [GitHub](https://github.com/) - To store associated files & developments of the website.
 - [Gitpod](https://www.gitpod.io/) - IDE used.
@@ -82,19 +92,7 @@ Please see [TESTING.md](TESTING.md) for a comprehensive list of tests performed.
 
 ## Deployment
 
-The site was deployed early using Github Pages. The is how the live site was deployed:
 
-1. Log in (or sign up) to Github.
-2. Find the repository for this project, Dima Bulavenko / BattleCity.
-3. Click on the Settings link.
-4. Click on the Pages link in the left hand side navigation bar.
-5. In the Source section (Build & Deployment), deploy from a branch.
-6. In the Branch section (Build & Deployment), choose main from the Select Branch drop down menu. Choose Root from the Select Folder drop down menu.
-7. Click Save. Your live Github Pages site is now deployed at the URL shown.
-8. Follow up:
-  - Go to repository home of website.
-  - Click 'Environments' in the right-hand-side panel.
-  - Click 'View deployment'.
 
 The live link can be found here - *INSERT LINK*
 
