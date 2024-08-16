@@ -1,19 +1,21 @@
 const config = {
-  type: Phaser.AUTO,
-  width: 800,
-  height: 600,
-  physics: {
-    default: "arcade",
-    arcade: {
-      gravity: { y: 0 }, // No gravity needed for a top-down game
-      debug: false, // Set to true if you want to see the collision boxes
+    type: Phaser.AUTO,
+    width: 800,
+    height: 600,
+    parent: 'phaser-game',
+    scene: {
+        preload: preload,
+        create: create,
+        update: update
     },
-  },
-  scene: {
-    preload: preload,
-    create: create,
-    update: update,
-  },
+    pixelArt: true, // For retro pixelated art style
+    physics: {
+        default: 'arcade',
+        arcade: {
+            gravity: { y: 0 }, // No gravity needed for a top-down game
+            debug: false // Set to true if you want to see the collision boxes
+        }
+    },
 };
 
 // Create the Phaser game instance
@@ -31,8 +33,9 @@ function preload() {
     }
   );
 
-  // Load the field image
-  this.load.image("battleCityField", "assets/battle_city_stage_01.png");
+    // Load the field image
+    this.load.image('battleCityField', 'assets/battle_city_stage_01.png');
+    this.load.tilemapTiledJSON("map", "assets/map1.json")
 }
 
 var player;
@@ -42,20 +45,27 @@ var fireKey;
 
 // Create game objects
 function create() {
-  // Add the field image to the scene and set its position
-  const field = this.add.image(400, 300, "battleCityField");
-
   // count the frames on the spritesheet once loaded
   const texture = this.textures.get("battleCitySprites");
   const totalFrames = texture.getFrameNames().length;
   console.log(`Total frames: ${totalFrames}`);
 
-  // Calculate the world bounds based on the field's size and position
-  const fieldWidth = 208;
-  const fieldHeight = 208;
-  const fieldX = 400 - fieldWidth / 2;
-  const fieldY = 300 - fieldHeight / 2;
+    // Calculate the world bounds based on the field's size and position
+    const fieldWidth = 208;
+    const fieldHeight = 208;
+    const fieldX = 400 - fieldWidth / 2;
+    const fieldY = 300 - fieldHeight / 2;
 
+    // Load the map and set up the layers
+    const map = this.make.tilemap({ key: "map", tileWidth: 16, tileHeight: 16 });
+    const tileset = map.addTilesetImage("map1", "battleCityField");
+    const layer = map.createLayer("toplayer", tileset, fieldX, fieldY);
+
+    // Assuming 'wall' is the layer you want to be collidable
+    const wallLayer = map.createLayer("wall", tileset, fieldX, fieldY);
+    const armorWallLayer = map.createLayer("armor_wall", tileset, fieldX, fieldY)
+    const eagleLayer = map.createLayer("eagle", tileset, fieldX, fieldY)
+    
   // Create animations for each direction
   this.anims.create({
     key: "moveUp",
@@ -126,37 +136,37 @@ function create() {
   // Enable cursor keys for player movement
   cursors = this.input.keyboard.createCursorKeys();
 
-  // Set world bounds to match the field size
-  this.physics.world.setBounds(fieldX, fieldY, fieldWidth, fieldHeight);
+    // Set world bounds to match the field size
+    this.physics.world.setBounds(fieldX, fieldY, fieldWidth, fieldHeight);
 
-  player.body.setCollideWorldBounds(true);
+    player.body.setCollideWorldBounds(true);
+
+    // Set collision on the wall tiles. 
+    // Assuming that tiles with IDs 1 and above are walls.
+    wallLayer.setCollisionByExclusion([-1]); // Exclude the tile with ID -1 from collisions
+    armorWallLayer.setCollisionByExclusion([-1]);
+    eagleLayer.setCollisionByExclusion([-1]);
+    
+    // Add collision between the player and the wall layer
+    this.physics.add.collider(player, wallLayer);
+    this.physics.add.collider(player, armorWallLayer);
+    this.physics.add.collider(player, eagleLayer);
+
 }
 
 // Update the game state
 function update() {
-  // Reset player velocity
-  player.setVelocity(0);
-
-  // Handle player movement
-  if (cursors.up.isDown) {
-    player.setVelocityY(-100);
-    player.anims.play("moveUp", true);
-    player.direction = "up";
-  } else if (cursors.down.isDown) {
-    player.setVelocityY(100);
-    player.anims.play("moveDown", true);
-    player.direction = "down";
-  } else if (cursors.left.isDown) {
-    player.setVelocityX(-100);
-    player.anims.play("moveLeft", true);
-    player.direction = "left";
-  } else if (cursors.right.isDown) {
-    player.setVelocityX(100);
-    player.anims.play("moveRight", true);
-    player.direction = "right";
-  } else {
-    player.anims.stop();
-  }
+    if (cursors.left.isDown) {
+        moveTank('left');
+    } else if (cursors.right.isDown) {
+        moveTank('right');
+    } else if (cursors.up.isDown) {
+        moveTank('up');
+    } else if (cursors.down.isDown) {
+        moveTank('down');
+    } else {
+        player.setVelocity(0, 0); // Stop movement if no key is pressed
+    }
 
   // handle firing when spacebar is pressed
   if (Phaser.Input.Keyboard.JustDown(fireKey)) {
@@ -203,4 +213,39 @@ function fireBullet() {
     // Play the bullet animation
     bullet.anims.play("bulletAnim", true);
   }
+}
+
+function roundTo(value, step) {
+    return Math.round(value / step) * step;
+}
+
+function moveTank(direction) {
+    let velocity = 70;
+
+    switch (direction) {
+        case 'left':
+            player.y = roundTo(player.y, 4);
+            player.setVelocity(-velocity, 0);
+            player.anims.play('moveLeft', true);
+            player.direction = "left";
+            break;
+        case 'right':
+            player.y = roundTo(player.y, 4);
+            player.setVelocity(velocity, 0);
+            player.anims.play('moveRight', true);
+            player.direction = "right";
+            break;
+        case 'up':
+            player.x = roundTo(player.x, 4);
+            player.setVelocity(0, -velocity);
+            player.anims.play('moveUp', true);
+            player.direction = "up";
+            break;
+        case 'down':
+            player.x = roundTo(player.x, 4);
+            player.setVelocity(0, velocity);
+            player.anims.play('moveDown', true);
+            player.direction = "down";
+            break;
+    }
 }
