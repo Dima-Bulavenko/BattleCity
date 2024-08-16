@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Battle City</title>
+ 
     <!--Favicon-->
     <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32x32.png">
@@ -12,9 +13,49 @@
     <link rel="icon" type="image/png" sizes="512x512" href="assets/favicon/android-chrome-512x512.png">
     <!--Css styles-->
     <link rel="stylesheet" href="assets/css/styles.css">
+
 </head>
 <body>
-    <script src="node_modules/phaser/dist/phaser.js"></script>
+    <div id="game-container">
+        <!-- Game Canvas -->
+        <div id="phaser-game"></div>
+
+        <!-- HUD (Heads-Up Display) -->
+        <div id="hud">
+            <div id="health-bar-container">
+                <div id="health-bar"></div>
+            </div>
+            <span id="score">Score: 0</span>
+            <span id="lives">Lives: 3</span>
+        </div>
+        
+
+        <!-- Main Menu -->
+        <div id="main-menu">
+            <h1>Battle City</h1>
+            <button id="start-button">Start Game</button>
+            <button id="instructions-button">Instructions</button>
+            <button id="high-scores-button">High Scores</button>
+        </div>
+
+        <div id="instructions-modal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>How to Play</h2>
+                <p>Use arrow keys to move your tank.</p>
+                <p>Press space to shoot.</p>
+                <p>Destroy enemy tanks to score points!</p>
+            </div>
+        </div>
+        
+         
+        
+        <div id="game-over">GAME OVER</div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/phaser@v3.80.1/dist/phaser.min.js"></script>
+    <script src="indexDG.js"></script>
     <script src="main.js"></script>
 </body>
 </html>
+
+
