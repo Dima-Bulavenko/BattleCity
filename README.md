@@ -35,7 +35,7 @@ As a player I want to:
 
 ### Colour Scheme
 
-The following colours were generated from the [Battle City Spritsheet](assets/battle_city_spritesheet.png). We chose a selection of neutral, muted and strong colours. They accent the gaming environment with an array of contrasts available.
+The following colours were generated from the [Battle City Spritsheet](assets/battle_city_spritesheet.png) using [Coolors](https://coolors.co/). We chose a selection of neutral, muted and strong colours. They accent the gaming environment with an array of contrasts available.
 
 ![Battle City Neutral Colour Palette](docs/design/battle_city_neutral.png)
 ![Battle City Muted Colour Palette](docs/design/battle_city_muted.png)
@@ -44,9 +44,8 @@ The following colours were generated from the [Battle City Spritsheet](assets/ba
 
 ### Typography
 
-Fonts were sourced from [Google Fonts](https://fonts.google.com/).
-
-*GIVE EXAMPLES & WHY YOU USED THEM*
+![Battle City Font](docs/fonts/battle_city_font.PNG)
+The [Press Start 2P](https://fonts.google.com/specimen/Press+Start+2P?preview.text=Welcome%20to%20Battle%20City&query=Press+Start+2P) font adds to the pixelated theme of the game. It adds some fun, and evokes a feeling of nostalgia. It is illustrative, yet has a structural integrity and readability to it. The user can get a clear sense of the design from this font.
 
 
 ### Imagery
