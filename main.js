@@ -113,25 +113,47 @@ function create() {
 
 // Update the game state
 function update() {
-    // Reset player velocity
-    player.setVelocity(0);
-
-    let velocity = 70;
-    
-    // Handle player movement
-    if (cursors.up.isDown) {
-        player.setVelocityY(-velocity);
-        player.anims.play('moveUp', true);
-    } else if (cursors.down.isDown) {
-        player.setVelocityY(velocity);
-        player.anims.play('moveDown', true);
-    } else if (cursors.left.isDown) {
-        player.setVelocityX(-velocity);
-        player.anims.play('moveLeft', true);
+    if (cursors.left.isDown) {
+        moveTank('left');
     } else if (cursors.right.isDown) {
-        player.setVelocityX(velocity);
-        player.anims.play('moveRight', true);
+        moveTank('right');
+    } else if (cursors.up.isDown) {
+        moveTank('up');
+    } else if (cursors.down.isDown) {
+        moveTank('down');
     } else {
-        player.anims.stop();
+        player.setVelocity(0, 0); // Stop movement if no key is pressed
+    }
+    
+}
+
+function roundTo(value, step) {
+    return Math.round(value / step) * step;
+}
+
+function moveTank(direction) {
+    let velocity = 70;
+
+    switch (direction) {
+        case 'left':
+            player.y = roundTo(player.y, 4);
+            player.setVelocity(-velocity, 0);
+            player.anims.play('moveLeft', true);
+            break;
+        case 'right':
+            player.y = roundTo(player.y, 4);
+            player.setVelocity(velocity, 0);
+            player.anims.play('moveRight', true);
+            break;
+        case 'up':
+            player.x = roundTo(player.x, 4);
+            player.setVelocity(0, -velocity);
+            player.anims.play('moveUp', true);
+            break;
+        case 'down':
+            player.x = roundTo(player.x, 4);
+            player.setVelocity(0, velocity);
+            player.anims.play('moveDown', true);
+            break;
     }
 }
