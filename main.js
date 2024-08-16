@@ -1,7 +1,11 @@
 const config = {
     type: Phaser.AUTO,
-    width: 800,
-    height: 600,
+    scale: {
+        mode: Phaser.Scale.RESIZE,       // Automatically resize to fit the parent container
+        autoCenter: Phaser.Scale.CENTER_BOTH,         // Center the game in the container
+        width: '100%',          
+        height: '100%',        
+    },
     parent: 'phaser-game',
     scene: {
         preload: preload,
@@ -12,8 +16,8 @@ const config = {
     physics: {
         default: 'arcade',
         arcade: {
-            gravity: { y: 0 }, // No gravity needed for a top-down game
-            debug: false // Set to true if you want to see the collision boxes
+            gravity: { y: 0 },    // No gravity needed for a top-down game
+            debug: false    // Set to true if you want to see the collision boxes
         }
     },
     scene: {
@@ -48,8 +52,8 @@ function create() {
     const field = this.add.image(400, 300, 'battleCityField');
 
     // Calculate the world bounds based on the field's size and position
-    const fieldWidth = 208;
-    const fieldHeight = 208;
+    const fieldWidth = 700;
+    const fieldHeight = 500;
     const fieldX = 400 - fieldWidth / 2;
     const fieldY = 300 - fieldHeight / 2;
 
