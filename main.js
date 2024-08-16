@@ -50,6 +50,7 @@ function create() {
 
     // Add the field image to the scene and set its position
     const field = this.add.image(400, 300, 'battleCityField');
+    field.setScale(this.cameras.main.width / field.width, this.cameras.main.height / field.height);
 
     // Calculate the world bounds based on the field's size and position
     const fieldWidth = 700;
