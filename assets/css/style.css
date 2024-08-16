@@ -24,7 +24,7 @@ body {
     margin: 50px auto;
     border: 4px solid #fff;
     box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
-    background: url('assets/images/pixel-grid.png'); /* Add a pixel grid background */
+    background: url('/assets/images/pixel-art-old-video-game-console-landscape-background-retro-style-8-bit-game-ai_985124-2227.avif'); /* Add a pixel grid background */
     background-size: cover;
 }
 
@@ -39,14 +39,19 @@ body {
 #phaser-game {
     width: 100%;
     height: 80%;
-    background-color: #333; /* Placeholder background */
+    display: block;
+    image-rendering: pixelated;
+    background-color: #333; 
 }
 
+/*Heads-up-display*/
 #hud {
     position: absolute;
     top: 10px;
     left: 10px;
     font-size: 14px;
+    display: flex;
+    align-items: center;
 }
 
 #main-menu {
@@ -66,26 +71,71 @@ body {
     padding: 10px 20px;
     font-size: 18px;
     cursor: pointer;
-    border: none;
-    background-color: #8f8383;
-    color: #fff;
     border-radius: 5px;
     transition: background-color 0.3s, transform 0.1s;
+    animation: pulse 1.5s infinite;
+    background-color: #42ae42; /* Green background for the Start button */
+    color: #000; /* Black text for contrast */
+    box-shadow: 0 0 10px #FFD700, 0 0 20px #FFD700, 0 0 30px #FFD700;
+    font-family: 'Press Start 2P', cursive;
 }
 
-
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 0 10px #fff;
+    }
+    50% {
+        transform: scale(1.1);
+        box-shadow: 0 0 20px rgb(189, 206, 63);
+    }
+}
+    
 #start-button:active {
-    transform: scale(0.95); /* Slightly shrink the button when clicked */
+    transform: scale(0.95);              
 }
 
-#start-button:hover,
-#instructions-button:hover,
+
+#start-button:hover {
+    background-color: #FFD700; /* Gold background on hover */
+    color: #000; /* Black text */
+    border-color: #00FF00; /* Green border on hover */
+    box-shadow: 0 0 5px #00FF00, 0 0 10px #00FF00;
+}
+
+#high-scores-button, 
+#instructions-button {
+    background-color: #444;
+    color: #FFF;
+    border: 2px solid #888;
+    padding: 10px 20px;
+    font-size: 14px;
+    font-family: 'Press Start 2P', cursive;
+    cursor: pointer;
+    margin-top: 20px;
+    text-transform: uppercase;
+}
+
+ 
 #high-scores-button:hover {
-    background-color: #777;
+    background-color: #888;
+    color: #000;
+    border-color: #000;
+    box-shadow: 0 0 5px #FFD700, 0 0 10px #FFD700;
+}
+#instructions-button:hover {
+    background-color: #888;
+    color: #000;
+    border-color: #000; 
+    box-shadow: 0 0 5px #FFD700, 0 0 10px #FFD700;
+}
+
+#instructions-button,
+#high-scores-button:hover {
     transform: scale(1.1);
     filter: drop-shadow(2px 2px 2px #000);
 }
-
+/*Instruction modal*/
 .modal {
     display: none;
     position: fixed;
@@ -97,6 +147,47 @@ body {
     overflow: auto;
     background-color: rgba(0,0,0,0.8);
     padding-top: 60px;
+    font-family: 'Press Start 2P', cursive;
+}
+
+.modal-content {
+    background-color: #222;
+    margin: 5% auto;
+    padding: 20px;
+    border: 4px solid #888;
+    border-radius: 8px;
+    width: 70%;
+    color: #00FF00;
+    box-shadow: 0 0 10px #00FF00, 0 0 20px #00FF00, 0 0 30px #00FF00;
+    text-align: center;
+
+}
+
+.modal-content h2 {
+    font-size: 24px;
+    color: #FFD700; /* Gold color for headings */
+    text-shadow: 2px 2px #000; /* Shadow effect for 3D look */
+    margin-bottom: 20px;
+}
+
+.modal-content p {
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+.close {
+    color: #FFD700;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    text-shadow: 2px 2px #000;
+}
+
+.close:hover,
+.close:focus {
+    color: #FF0000; /* Red color on hover for emphasis */
+    text-decoration: none;
+    cursor: pointer;
 }
 
 
@@ -146,15 +237,6 @@ body {
     animation: pixelate 0.5s ease-in;
 }
 
-#hud {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    font-size: 14px;
-    display: flex;
-    align-items: center;
-}
-
 #health-bar-container {
     width: 200px;
     height: 20px;
@@ -183,3 +265,18 @@ body {
     font-size: 16px;
     margin-left: 10px;
 }
+    
+#speaker-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    border: none;
+    cursor: pointer;
+    z-index: 10; /* Ensure it appears on top */
+}
+
+#speaker-icon {
+    width: 32px; /* Adjust the size as needed */
+    height: 32px;
+}
+
