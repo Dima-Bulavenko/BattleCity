@@ -45,6 +45,11 @@ function create() {
   // Add the field image to the scene and set its position
   const field = this.add.image(400, 300, "battleCityField");
 
+  // count the frames on the spritesheet once loaded
+  const texture = this.textures.get("battleCitySprites");
+  const totalFrames = texture.getFrameNames().length;
+  console.log(`Total frames: ${totalFrames}`);
+
   // Calculate the world bounds based on the field's size and position
   const fieldWidth = 208;
   const fieldHeight = 208;
@@ -92,22 +97,22 @@ function create() {
     repeat: -1,
   });
 
+  // Create bullet group
+  bullets = this.physics.add.group({
+    defaulKey: "battlecitySprites",
+    frame: 217,
+    maxSize: 100,
+  });
+
   // Create bullet animation
   this.anims.create({
     key: "bulletAnim",
     frames: this.anims.generateFrameNumbers("battleCitySprites", {
-      start: 15,
-      end: 15,
+      start: 217,
+      end: 217,
     }),
     frameRate: 10,
     repeat: -1,
-  });
-
-  // Create bullet group
-  bullets = this.physics.add.group({
-    defaulKey: "battlecitySprites",
-    frame: 15,
-    maxSize: 10,
   });
 
   fireKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
@@ -166,7 +171,7 @@ function fireBullet() {
   if (bullet) {
     console.log("Bullet obtained"); // Debug log
     console.log("Player direction:", player.direction); // Debug log
-    bullet.setFrame(15);
+    bullet.setFrame(217);
     // Set bullet position
     switch (player.direction) {
       case "up":
