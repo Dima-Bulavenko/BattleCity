@@ -36,6 +36,7 @@ function preload() {
 
     // Load the field image
     this.load.image('battleCityField', 'assets/battle_city_stage_01.png');
+    this.load.tilemapTiledJSON("map", "assets/map1.json")
 }
 
 var player;
@@ -43,15 +44,22 @@ var cursors;
 
 // Create game objects
 function create() {
-
-    // Add the field image to the scene and set its position
-    const field = this.add.image(400, 300, 'battleCityField');
-
     // Calculate the world bounds based on the field's size and position
     const fieldWidth = 208;
     const fieldHeight = 208;
     const fieldX = 400 - fieldWidth / 2;
     const fieldY = 300 - fieldHeight / 2;
+
+    // Load the map and set up the layers
+    const map = this.make.tilemap({ key: "map", tileWidth: 16, tileHeight: 16 });
+    const tileset = map.addTilesetImage("map1", "battleCityField");
+    const layer = map.createLayer("toplayer", tileset, fieldX, fieldY);
+
+    // Assuming 'wall' is the layer you want to be collidable
+    const wallLayer = map.createLayer("wall", tileset, fieldX, fieldY);
+    const armorWallLayer = map.createLayer("armor_wall", tileset, fieldX, fieldY)
+    const eagleLayer = map.createLayer("eagle", tileset, fieldX, fieldY)
+
 
     // Create animations for each direction
     this.anims.create({
@@ -85,38 +93,74 @@ function create() {
     // Create the player sprite and set its initial position
     player = this.physics.add.sprite(100, 100, 'battleCitySprites');
 
+    
     // Set collision boundaries for the player
     player.setCollideWorldBounds(true);
 
     // Enable cursor keys for player movement
     cursors = this.input.keyboard.createCursorKeys();
 
-     // Set world bounds to match the field size
-     this.physics.world.setBounds(fieldX, fieldY, fieldWidth, fieldHeight);
+    // Set world bounds to match the field size
+    this.physics.world.setBounds(fieldX, fieldY, fieldWidth, fieldHeight);
 
-    
     player.body.setCollideWorldBounds(true);
+
+    // Set collision on the wall tiles. 
+    // Assuming that tiles with IDs 1 and above are walls.
+    wallLayer.setCollisionByExclusion([-1]); // Exclude the tile with ID -1 from collisions
+    armorWallLayer.setCollisionByExclusion([-1]);
+    eagleLayer.setCollisionByExclusion([-1]);
+    
+    // Add collision between the player and the wall layer
+    this.physics.add.collider(player, wallLayer);
+    this.physics.add.collider(player, armorWallLayer);
+    this.physics.add.collider(player, eagleLayer);
+
 }
 
 // Update the game state
 function update() {
-    // Reset player velocity
-    player.setVelocity(0);
-
-    // Handle player movement
-    if (cursors.up.isDown) {
-        player.setVelocityY(-100);
-        player.anims.play('moveUp', true);
-    } else if (cursors.down.isDown) {
-        player.setVelocityY(100);
-        player.anims.play('moveDown', true);
-    } else if (cursors.left.isDown) {
-        player.setVelocityX(-100);
-        player.anims.play('moveLeft', true);
+    if (cursors.left.isDown) {
+        moveTank('left');
     } else if (cursors.right.isDown) {
-        player.setVelocityX(100);
-        player.anims.play('moveRight', true);
+        moveTank('right');
+    } else if (cursors.up.isDown) {
+        moveTank('up');
+    } else if (cursors.down.isDown) {
+        moveTank('down');
     } else {
-        player.anims.stop();
+        player.setVelocity(0, 0); // Stop movement if no key is pressed
+    }
+    
+}
+
+function roundTo(value, step) {
+    return Math.round(value / step) * step;
+}
+
+function moveTank(direction) {
+    let velocity = 70;
+
+    switch (direction) {
+        case 'left':
+            player.y = roundTo(player.y, 4);
+            player.setVelocity(-velocity, 0);
+            player.anims.play('moveLeft', true);
+            break;
+        case 'right':
+            player.y = roundTo(player.y, 4);
+            player.setVelocity(velocity, 0);
+            player.anims.play('moveRight', true);
+            break;
+        case 'up':
+            player.x = roundTo(player.x, 4);
+            player.setVelocity(0, -velocity);
+            player.anims.play('moveUp', true);
+            break;
+        case 'down':
+            player.x = roundTo(player.x, 4);
+            player.setVelocity(0, velocity);
+            player.anims.play('moveDown', true);
+            break;
     }
 }
