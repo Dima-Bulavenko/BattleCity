@@ -119,7 +119,6 @@ function create() {
   // Create player tank
   createTank.call(this, 304, 204, 'player');
   createTank.call(this, 304, 204, 'enemy');
-  createTank.call(this, 304 + tileSize, 204, 'enemy');
 
   // Enable cursor keys for player movement
   cursors = this.input.keyboard.createCursorKeys();
@@ -254,9 +253,9 @@ function moveTank(direction, tank) {
 function createTank(x, y, type) {
     let tank;
     if (type === 'player') {
-        tank = createPlayerTank.call(this, x, y);
+        tank = createPlayerTank.call(this, x, y, type);
     } else {
-        tank = createEnemyTank.call(this, x, y);
+        tank = createEnemyTank.call(this, x, y, type);
     }
 
     if (tank) {
