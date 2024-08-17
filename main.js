@@ -21,34 +21,51 @@ const config = {
 // Create the Phaser game instance
 const game = new Phaser.Game(config);
 
+// Declare variables globally
+let player;
+let cursors;
+let bullets;
+let fireKey;
+let music; // Declare music variable globally
+let speakerButtonElement = document.getElementById('speaker-button');
+let speakerIconElement = document.getElementById('speaker-icon');
+
 // Preload assets
 function preload() {
-  // Load the spritesheet (adjust frameWidth and frameHeight to match your sprites)
-  this.load.spritesheet(
-    "battleCitySprites",
-    "assets/battle_city_spritesheet.png",
-    {
-      frameWidth: 16, // Width of each frame
-      frameHeight: 16, // Height of each frame
-    }
-  );
+    // Load the spritesheet (adjust frameWidth and frameHeight to match your sprites)
+    this.load.spritesheet(
+        "battleCitySprites",
+        "assets/battle_city_spritesheet.png",
+        {
+            frameWidth: 16, // Width of each frame
+            frameHeight: 16, // Height of each frame
+        }
+    );
 
     // Load the field image
     this.load.image('battleCityField', 'assets/battle_city_stage_01.png');
-    this.load.tilemapTiledJSON("map", "assets/map1.json")
+    this.load.tilemapTiledJSON("map", "assets/map1.json");
+
+    // Preload the music file
+    this.load.audio('retroMusic', 'assets/sounds/248117__zagi2__retro-gaming-loop.ogg');
 }
 
-var player;
-var cursors;
-var bullets;
-var fireKey;
-
-// Create game objects
+// Create game objects and add music
 function create() {
-  // count the frames on the spritesheet once loaded
-  const texture = this.textures.get("battleCitySprites");
-  const totalFrames = texture.getFrameNames().length;
-  console.log(`Total frames: ${totalFrames}`);
+    // Add and play the background music
+    music = this.sound.add('retroMusic');
+    music.play({
+        loop: true,
+        volume: 0.3
+    });
+
+    // Add event listener to the HTML speaker button
+    speakerButtonElement.addEventListener('click', toggleMusic);
+
+    // Count the frames on the spritesheet once loaded
+    const texture = this.textures.get("battleCitySprites");
+    const totalFrames = texture.getFrameNames().length;
+    console.log(`Total frames: ${totalFrames}`);
 
     // Calculate the world bounds based on the field's size and position
     const fieldWidth = 208;
@@ -63,78 +80,78 @@ function create() {
 
     // Assuming 'wall' is the layer you want to be collidable
     const wallLayer = map.createLayer("wall", tileset, fieldX, fieldY);
-    const armorWallLayer = map.createLayer("armor_wall", tileset, fieldX, fieldY)
-    const eagleLayer = map.createLayer("eagle", tileset, fieldX, fieldY)
-    
-  // Create animations for each direction
-  this.anims.create({
-    key: "moveUp",
-    frames: this.anims.generateFrameNumbers("battleCitySprites", {
-      start: 0,
-      end: 1,
-    }),
-    frameRate: 5,
-    repeat: -1,
-  });
+    const armorWallLayer = map.createLayer("armor_wall", tileset, fieldX, fieldY);
+    const eagleLayer = map.createLayer("eagle", tileset, fieldX, fieldY);
 
-  this.anims.create({
-    key: "moveLeft",
-    frames: this.anims.generateFrameNumbers("battleCitySprites", {
-      start: 2,
-      end: 3,
-    }),
-    frameRate: 5,
-    repeat: -1,
-  });
+    // Create animations for each direction
+    this.anims.create({
+        key: "moveUp",
+        frames: this.anims.generateFrameNumbers("battleCitySprites", {
+            start: 0,
+            end: 1,
+        }),
+        frameRate: 5,
+        repeat: -1,
+    });
 
-  this.anims.create({
-    key: "moveDown",
-    frames: this.anims.generateFrameNumbers("battleCitySprites", {
-      start: 4,
-      end: 5,
-    }),
-    frameRate: 5,
-    repeat: -1,
-  });
+    this.anims.create({
+        key: "moveLeft",
+        frames: this.anims.generateFrameNumbers("battleCitySprites", {
+            start: 2,
+            end: 3,
+        }),
+        frameRate: 5,
+        repeat: -1,
+    });
 
-  this.anims.create({
-    key: "moveRight",
-    frames: this.anims.generateFrameNumbers("battleCitySprites", {
-      start: 6,
-      end: 7,
-    }),
-    frameRate: 5,
-    repeat: -1,
-  });
+    this.anims.create({
+        key: "moveDown",
+        frames: this.anims.generateFrameNumbers("battleCitySprites", {
+            start: 4,
+            end: 5,
+        }),
+        frameRate: 5,
+        repeat: -1,
+    });
 
-  // Create bullet group
-  bullets = this.physics.add.group({
-    defaulKey: "battlecitySprites",
-    frame: 217,
-    maxSize: 100,
-  });
+    this.anims.create({
+        key: "moveRight",
+        frames: this.anims.generateFrameNumbers("battleCitySprites", {
+            start: 6,
+            end: 7,
+        }),
+        frameRate: 5,
+        repeat: -1,
+    });
 
-  // Create bullet animation
-  this.anims.create({
-    key: "bulletAnim",
-    frames: this.anims.generateFrameNumbers("battleCitySprites", {
-      start: 217,
-      end: 217,
-    }),
-    frameRate: 10,
-    repeat: -1,
-  });
+    // Create bullet group
+    bullets = this.physics.add.group({
+        defaulKey: "battlecitySprites",
+        frame: 217,
+        maxSize: 100,
+    });
 
-  fireKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+    // Create bullet animation
+    this.anims.create({
+        key: "bulletAnim",
+        frames: this.anims.generateFrameNumbers("battleCitySprites", {
+            start: 217,
+            end: 217,
+        }),
+        frameRate: 10,
+        repeat: -1,
+    });
 
-  // Create the player sprite and set its initial position
-  player = this.physics.add.sprite(100, 100, "battleCitySprites");
+    fireKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
-  // Set collision boundaries for the player
-  player.setCollideWorldBounds(true);
+    // Create the player sprite and set its initial position
+    player = this.physics.add.sprite(100, 100, "battleCitySprites");
 
-  // Enable cursor keys for player movement
-  cursors = this.input.keyboard.createCursorKeys();
+    // Set collision boundaries for the player
+    player.setCollideWorldBounds(true);
+
+    // Enable cursor keys for player movement
+    cursors = this.input.keyboard.createCursorKeys();
 
     // Set world bounds to match the field size
     this.physics.world.setBounds(fieldX, fieldY, fieldWidth, fieldHeight);
@@ -146,12 +163,22 @@ function create() {
     wallLayer.setCollisionByExclusion([-1]); // Exclude the tile with ID -1 from collisions
     armorWallLayer.setCollisionByExclusion([-1]);
     eagleLayer.setCollisionByExclusion([-1]);
-    
+
     // Add collision between the player and the wall layer
     this.physics.add.collider(player, wallLayer);
     this.physics.add.collider(player, armorWallLayer);
     this.physics.add.collider(player, eagleLayer);
+}
 
+// Toggle the music on and off
+function toggleMusic() {
+    if (music.isPlaying) {
+        music.pause();
+        speakerIconElement.src = '/assets/images/mute.png'; // Switch to the "off" icon
+    } else {
+        music.resume();
+        speakerIconElement.src = 'assets/images/volume.png'; // Switch to the "on" icon
+    }
 }
 
 // Update the game state
@@ -168,51 +195,51 @@ function update() {
         player.setVelocity(0, 0); // Stop movement if no key is pressed
     }
 
-  // handle firing when spacebar is pressed
-  if (Phaser.Input.Keyboard.JustDown(fireKey)) {
-    fireBullet();
-  }
+    // Handle firing when spacebar is pressed
+    if (Phaser.Input.Keyboard.JustDown(fireKey)) {
+        fireBullet();
+    }
 }
 
-// function that handles shooting
+// Function that handles shooting
 function fireBullet() {
-  const bullet = bullets.get();
+    const bullet = bullets.get();
 
-  if (bullet) {
-    console.log("Bullet obtained"); // Debug log
-    console.log("Player direction:", player.direction); // Debug log
-    bullet.setFrame(217);
-    // Set bullet position
-    switch (player.direction) {
-      case "up":
-        bullet.setPosition(player.x, player.y - 16);
-        bullet.setVelocityY(-200);
-        bullet.setVelocityX(0);
-        break;
-      case "down":
-        bullet.setPosition(player.x, player.y + 16);
-        bullet.setVelocityY(200);
-        bullet.setVelocityX(0);
-        break;
-      case "left":
-        bullet.setPosition(player.x - 16, player.y);
-        bullet.setVelocityX(-200);
-        bullet.setVelocityY(0);
-        break;
-      case "right":
-        bullet.setPosition(player.x + 16, player.y);
-        bullet.setVelocityX(200);
-        bullet.setVelocityY(0);
-        break;
+    if (bullet) {
+        console.log("Bullet obtained"); // Debug log
+        console.log("Player direction:", player.direction); // Debug log
+        bullet.setFrame(217);
+        // Set bullet position
+        switch (player.direction) {
+            case "up":
+                bullet.setPosition(player.x, player.y - 16);
+                bullet.setVelocityY(-200);
+                bullet.setVelocityX(0);
+                break;
+            case "down":
+                bullet.setPosition(player.x, player.y + 16);
+                bullet.setVelocityY(200);
+                bullet.setVelocityX(0);
+                break;
+            case "left":
+                bullet.setPosition(player.x - 16, player.y);
+                bullet.setVelocityX(-200);
+                bullet.setVelocityY(0);
+                break;
+            case "right":
+                bullet.setPosition(player.x + 16, player.y);
+                bullet.setVelocityX(200);
+                bullet.setVelocityY(0);
+                break;
+        }
+
+        // Activate bullet and make it visible
+        bullet.setActive(true);
+        bullet.setVisible(true);
+
+        // Play the bullet animation
+        bullet.anims.play("bulletAnim", true);
     }
-
-    // Activate bullet and make it visible
-    bullet.setActive(true);
-    bullet.setVisible(true);
-
-    // Play the bullet animation
-    bullet.anims.play("bulletAnim", true);
-  }
 }
 
 function roundTo(value, step) {
