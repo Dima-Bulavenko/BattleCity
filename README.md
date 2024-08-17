@@ -67,7 +67,7 @@ The [Press Start 2P](https://fonts.google.com/specimen/Press+Start+2P?preview.te
 
 ### Flowchart
 
-- ![Game Layout](*LINK DOCUMENT*)
+- ![Game Layout](/docs/battle_city_game_layout_visual.png)
 
 ---
 
@@ -89,7 +89,7 @@ Please see [TESTING.md](TESTING.md) for a comprehensive list of tests performed.
 
 ### Frameworks, Libraries & Programs
 
-- [DevTools] - Testing & Troubleshooting
+- [Google Chrome Developer Tools](https://developer.chrome.com/docs/devtools/overview/)
 - [GitHub](https://github.com/) - To store associated files & developments of the website.
 - [Gitpod](https://www.gitpod.io/) - IDE used.
 - [Phaser](https://phaser.io/) - To create game.
