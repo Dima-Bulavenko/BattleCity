@@ -65,6 +65,7 @@ function preload() {
 
     // Preload the music file
     this.load.audio('retroMusic', 'assets/sounds/248117__zagi2__retro-gaming-loop.ogg');
+    this.load.audtio('gameOverSound', 'assets/sounds/battle_city_8_bit_game_over');
 }
 
 // Create game objects and add music
@@ -409,3 +410,17 @@ function setTankAnimation(tankSprites, tank) {
   });
 }
 
+
+function onGameOver() {
+    // Stop retroMusic
+    if (gameOver) {
+        music.stop();
+    }
+
+    // Reassign music to gameOverSound
+    music = this.sound.add('gameOverSound');
+    music.play({
+        loop: true,
+        volume: 0.3
+    });
+}
