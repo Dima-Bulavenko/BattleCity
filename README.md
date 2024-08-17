@@ -19,7 +19,16 @@ As a player I want to:
 - Fire bullets so I can defeat my opponent
 - See my score displayed on the screen so I can track my progress
 - See my how many lives I have remaining
-- Exit the gameplay (/to read instrucitons)
+- Exit the gameplay (/to read instructions)
+- Mute the sounds in case I am in a public space
+
+
+As the game owner I want to:
+- Create a game that is fun & nostalgic
+- Provide a fully responsive game
+- Create simple navigation
+- Clear prompts using visuals & 8 bit sound effects
+- Have a sound icon so users can mute & unmute sounds
 
 ---
 
@@ -80,11 +89,9 @@ Please see [TESTING.md](TESTING.md) for a comprehensive list of tests performed.
 
 ### Frameworks, Libraries & Programs
 
-- [Coolors](https://coolors.co/) - To create colour palettes.
 - [DevTools] - Testing & Troubleshooting
 - [GitHub](https://github.com/) - To store associated files & developments of the website.
 - [Gitpod](https://www.gitpod.io/) - IDE used.
-- [Google Fonts](https://fonts.google.com/) - To extract fonts for the website.
 - [Phaser](https://phaser.io/) - To create game.
 - [Tiled](https://www.mapeditor.org/) - Map editor used.
 - [VS Code](https://code.visualstudio.com/) - IDE used.
@@ -103,9 +110,13 @@ The live link can be found [here](https://dima-bulavenko.github.io/BattleCity/).
 
 ## Credits
 
-* [Freesound](https://freesound.org/) for sounds
+### Media
+
+* [Coolors](https://coolors.co/) to create colour palettes.
 * [Favicon](https://favicon.io/) for favicon generation
 * [Flaticon](https://favicon.io/) for favicon image
+* [Freesound](https://freesound.org/) for sounds
+* [Google Fonts](https://fonts.google.com/) to extract fonts for the website.
 
 ### Code
 *REFERENCE ANY CODE COPIED FROM EXTERNAL SOURCES HERE*
