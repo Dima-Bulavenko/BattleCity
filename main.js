@@ -102,7 +102,10 @@ function create() {
     bullets = this.physics.add.group({
         defaulKey: "battlecitySprites",
         frame: 217,
-        maxSize: 100,
+        maxSize: -1,
+        bounceX: 0,
+        bounceY: 0,
+        setCollideWorldBounds: true
     });
 
     // Create bullet animation
@@ -115,6 +118,9 @@ function create() {
         frameRate: 10,
         repeat: -1,
     });
+
+    // Set up bullet collisions
+    setBulletCollision.call(this, bullets);
   
   // Create player tank
   createTank.call(this, 304, 204, 'player');
@@ -173,6 +179,9 @@ function fireBullet() {
     if (bullet) {
         console.log("Bullet obtained"); // Debug log
         console.log("Player direction:", player.direction); // Debug log
+
+        bullet.enableBody(true, player.x, player.y, true);
+
         bullet.setFrame(217);
         // Set bullet position
         switch (player.direction) {
@@ -205,6 +214,25 @@ function fireBullet() {
         // Play the bullet animation
         bullet.anims.play("bulletAnim", true);
     }
+}
+
+// Function that handles bullet collision
+function setBulletCollision() {
+  this.physics.add.collider(bullets, wallLayer, bulletHitsWall, null, this);
+  this.physics.add.collider(bullets, armorWallLayer, bulletHitsWall, null, this);
+  this.physics.add.collider(bullets, eagleLayer, bulletHitsEagle, null, this);
+}
+
+// Function to ensure bullet is destroyed after collision
+function bulletHitsWall(bullet, tile) {
+  console.log("bullet hits wall")
+  bullet.setVelocity(0);
+  bullet.disableBody(true, true);
+  wallLayer.removeTileAt(tile.x, tile.y);
+}
+
+function bulletHitsEagle(bullet, tile) {
+  bullet.disableBody(true, true);
 }
 
 function roundTo(value, step) {
