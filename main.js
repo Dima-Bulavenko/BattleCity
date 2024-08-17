@@ -296,3 +296,15 @@ function createSpriteSet(spriteName, startFrame, endFrame) {
         }
     );
 }
+
+/**
+ * Set tank collision
+ * Invoke in the create() using this syntax: 
+ * setTankCollision.call(this, tank);
+ */
+function setTankCollision(tank){
+  tank.setCollideWorldBounds(true);
+  this.physics.add.collider(tank, wallLayer);
+  this.physics.add.collider(tank, armorWallLayer);
+  this.physics.add.collider(tank, eagleLayer);
+}
