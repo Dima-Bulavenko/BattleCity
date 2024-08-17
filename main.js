@@ -249,3 +249,30 @@ function moveTank(direction) {
             break;
     }
 }
+
+
+/**
+ * Displays all frames of a given sprite and it indexes.
+ * Useful for debugging and testing.
+ * Invoke in the end of the create() using this syntax: 
+ * showSpritesFrames.call(this, 'spriteName');
+ * @param {string} spriteName - The name of the sprite.
+ */
+function showSpritesFrames(spriteName) {
+    const texture = this.textures.get(spriteName);
+    const frameNames = texture.getFrameNames();
+    const totalFrames = frameNames.length;
+    let x = 0;
+    let y = 0;
+    let shiftPosition = 16;
+    for (let i = 0; i < totalFrames; i++) {
+        this.add.image(x, y, spriteName, frameNames[i]).setOrigin(0, 0);
+        this.add.text(x, y+shiftPosition, i.toString(), { fontSize: '8px', fill: '#f50505' }).setOrigin(0, 0);
+        x += shiftPosition;
+        if (x > 384) {
+            x = 0;
+            y += 2 * shiftPosition;
+        }
+    }
+}
+}   
