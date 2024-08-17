@@ -275,4 +275,24 @@ function showSpritesFrames(spriteName) {
         }
     }
 }
-}   
+
+/**
+ * Creates a spritesheet with a given range of frames.
+ * Invoke in the preload() using this syntax: 
+ * createSpriteSet.call(this, 'spriteName', startFrame, endFrame);
+ * @param {string} spriteName - The name of the sprite.
+ * @param {number} startFrame - The index of the first frame.
+ * @param {number} endFrame - The index of the last frame.
+ */
+function createSpriteSet(spriteName, startFrame, endFrame) {
+    this.load.spritesheet(
+        spriteName,
+        "assets/battle_city_spritesheet.png",
+        {
+        frameWidth: 16,
+        frameHeight: 16,
+        startFrame: startFrame,
+        endFrame: endFrame,
+        }
+    );
+}
