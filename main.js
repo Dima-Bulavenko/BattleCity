@@ -139,31 +139,28 @@ function create() {
     // Set world bounds to match the field size
     this.physics.world.setBounds(fieldX, fieldY, fieldWidth, fieldHeight);
 
-    player.body.setCollideWorldBounds(true);
-
     // Set collision on the wall tiles. 
     // Assuming that tiles with IDs 1 and above are walls.
     wallLayer.setCollisionByExclusion([-1]); // Exclude the tile with ID -1 from collisions
     armorWallLayer.setCollisionByExclusion([-1]);
     eagleLayer.setCollisionByExclusion([-1]);
-    
+    createEnemy.call(this);
     // Add collision between the player and the wall layer
     this.physics.add.collider(player, wallLayer);
     this.physics.add.collider(player, armorWallLayer);
     this.physics.add.collider(player, eagleLayer);
-
 }
 
 // Update the game state
 function update() {
     if (cursors.left.isDown) {
-        moveTank('left');
+        moveTank('left', player);
     } else if (cursors.right.isDown) {
-        moveTank('right');
+        moveTank('right', player);
     } else if (cursors.up.isDown) {
-        moveTank('up');
+        moveTank('up', player);
     } else if (cursors.down.isDown) {
-        moveTank('down');
+        moveTank('down', player);
     } else {
         player.setVelocity(0, 0); // Stop movement if no key is pressed
     }
@@ -219,33 +216,33 @@ function roundTo(value, step) {
     return Math.round(value / step) * step;
 }
 
-function moveTank(direction) {
+function moveTank(direction, tank) {
     let velocity = 70;
-
+    let prefix = tank.type;
     switch (direction) {
         case 'left':
-            player.y = roundTo(player.y, 4);
-            player.setVelocity(-velocity, 0);
-            player.anims.play('moveLeft', true);
-            player.direction = "left";
+            tank.y = roundTo(tank.y, 4);
+            tank.setVelocity(-velocity, 0);
+            tank.anims.play(`${prefix}_moveLeft`, true);
+            tank.direction = "left";
             break;
         case 'right':
-            player.y = roundTo(player.y, 4);
-            player.setVelocity(velocity, 0);
-            player.anims.play('moveRight', true);
-            player.direction = "right";
+            tank.y = roundTo(tank.y, 4);
+            tank.setVelocity(velocity, 0);
+            tank.anims.play(`${prefix}_moveRight`, true);
+            tank.direction = "right";
             break;
         case 'up':
-            player.x = roundTo(player.x, 4);
-            player.setVelocity(0, -velocity);
-            player.anims.play('moveUp', true);
-            player.direction = "up";
+            tank.x = roundTo(tank.x, 4);
+            tank.setVelocity(0, -velocity);
+            tank.anims.play(`${prefix}_moveUp`, true);
+            tank.direction = "up";
             break;
         case 'down':
-            player.x = roundTo(player.x, 4);
-            player.setVelocity(0, velocity);
-            player.anims.play('moveDown', true);
-            player.direction = "down";
+            tank.x = roundTo(tank.x, 4);
+            tank.setVelocity(0, velocity);
+            tank.anims.play(`${prefix}_moveDown`, true);
+            tank.direction = "down";
             break;
     }
 }
