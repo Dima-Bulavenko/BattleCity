@@ -30,27 +30,7 @@ const config = {
 // Create the Phaser game instance
 const game = new Phaser.Game(config);
 
-// Preload assets
-function preload() {
-  // Load the spritesheet (adjust frameWidth and frameHeight to match your sprites)
-  this.load.spritesheet(
-    "battleCitySprites",
-    "assets/battle_city_spritesheet.png",
-    {
-      frameWidth: tileSize, // Width of each frame
-      frameHeight: tileSize, // Height of each frame
-    }
-  );
-
-    // load tank spriteset
-    createSpriteSet.call(this, 'playerSprites', 0, 7);
-    createSpriteSet.call(this, 'enemySprites', 8, 15);
-
-    // Load the field image
-    this.load.image('battleCityField', 'assets/battle_city_stage_01.png');
-    this.load.tilemapTiledJSON("map", "assets/map1.json")
-}
-
+// Declare variables globally
 var player;
 var cursors;
 var bullets;
@@ -58,9 +38,47 @@ var fireKey;
 var enemies; 
 // Layers
 var toplayer, wallLayer, armorWallLayer, eagleLayer
+// Music
+let music;
+let speakerButtonElement = document.getElementById('speaker-button');
+let speakerIconElement = document.getElementById('speaker-icon');
 
-// Create game objects
+// Preload assets
+function preload() {
+    // Load the spritesheet (adjust frameWidth and frameHeight to match your sprites)
+    this.load.spritesheet(
+        "battleCitySprites",
+        "assets/battle_city_spritesheet.png",
+        {
+            frameWidth: 16, // Width of each frame
+            frameHeight: 16, // Height of each frame
+        }
+    );
+
+    // load tank spriteset
+    createSpriteSet.call(this, 'playerSprites', 0, 7);
+    createSpriteSet.call(this, 'enemySprites', 8, 15);
+
+    // Load the field image
+    this.load.image('battleCityField', 'assets/battle_city_stage_01.png');
+    this.load.tilemapTiledJSON("map", "assets/map1.json");
+
+    // Preload the music file
+    this.load.audio('retroMusic', 'assets/sounds/248117__zagi2__retro-gaming-loop.ogg');
+}
+
+// Create game objects and add music
 function create() {
+    // Add and play the background music
+    music = this.sound.add('retroMusic');
+    music.play({
+        loop: true,
+        volume: 0.3
+    });
+
+    // Add event listener to the HTML speaker button
+    speakerButtonElement.addEventListener('click', toggleMusic);
+
     // Load the map and set up the layers
     const map = this.make.tilemap({ key: "map", tileWidth: tileSize, tileHeight: tileSize });
     const tileset = map.addTilesetImage("map1", "battleCityField");
@@ -80,32 +98,46 @@ function create() {
     // Set world bounds to match the field size
     this.physics.world.setBounds(mapX, mapY, mapWidth, mapHeight);
 
-  // Create bullet group
-  bullets = this.physics.add.group({
-    defaulKey: "battlecitySprites",
-    frame: 217,
-    maxSize: 100,
-  });
+    // Create bullet group
+    bullets = this.physics.add.group({
+        defaulKey: "battlecitySprites",
+        frame: 217,
+        maxSize: 100,
+    });
 
-  // Create bullet animation
-  this.anims.create({
-    key: "bulletAnim",
-    frames: this.anims.generateFrameNumbers("battleCitySprites", {
-      start: 217,
-      end: 217,
-    }),
-    frameRate: 10,
-    repeat: -1,
-  });
-
-  fireKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
-
+    // Create bullet animation
+    this.anims.create({
+        key: "bulletAnim",
+        frames: this.anims.generateFrameNumbers("battleCitySprites", {
+            start: 217,
+            end: 217,
+        }),
+        frameRate: 10,
+        repeat: -1,
+    });
+  
+  // Create player tank
   createTank.call(this, 304, 204, 'player');
   createTank.call(this, 304, 204, 'enemy');
   createTank.call(this, 304 + tileSize, 204, 'enemy');
 
   // Enable cursor keys for player movement
   cursors = this.input.keyboard.createCursorKeys();
+    fireKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+
+    // Enable cursor keys for player movement
+    cursors = this.input.keyboard.createCursorKeys();
+}
+
+// Toggle the music on and off
+function toggleMusic() {
+    if (music.isPlaying) {
+        music.pause();
+        speakerIconElement.src = '/assets/images/mute.png'; // Switch to the "off" icon
+    } else {
+        music.resume();
+        speakerIconElement.src = 'assets/images/volume.png'; // Switch to the "on" icon
+    }
 }
 
 // Update the game state
@@ -135,45 +167,45 @@ function update() {
   }
 }
 
-// function that handles shooting
+// Function that handles shooting
 function fireBullet() {
-  const bullet = bullets.get();
+    const bullet = bullets.get();
 
-  if (bullet) {
-    console.log("Bullet obtained"); // Debug log
-    console.log("Player direction:", player.direction); // Debug log
-    bullet.setFrame(217);
-    // Set bullet position
-    switch (player.direction) {
-      case "up":
-        bullet.setPosition(player.x, player.y - 16);
-        bullet.setVelocityY(-200);
-        bullet.setVelocityX(0);
-        break;
-      case "down":
-        bullet.setPosition(player.x, player.y + 16);
-        bullet.setVelocityY(200);
-        bullet.setVelocityX(0);
-        break;
-      case "left":
-        bullet.setPosition(player.x - 16, player.y);
-        bullet.setVelocityX(-200);
-        bullet.setVelocityY(0);
-        break;
-      case "right":
-        bullet.setPosition(player.x + 16, player.y);
-        bullet.setVelocityX(200);
-        bullet.setVelocityY(0);
-        break;
+    if (bullet) {
+        console.log("Bullet obtained"); // Debug log
+        console.log("Player direction:", player.direction); // Debug log
+        bullet.setFrame(217);
+        // Set bullet position
+        switch (player.direction) {
+            case "up":
+                bullet.setPosition(player.x, player.y - 16);
+                bullet.setVelocityY(-200);
+                bullet.setVelocityX(0);
+                break;
+            case "down":
+                bullet.setPosition(player.x, player.y + 16);
+                bullet.setVelocityY(200);
+                bullet.setVelocityX(0);
+                break;
+            case "left":
+                bullet.setPosition(player.x - 16, player.y);
+                bullet.setVelocityX(-200);
+                bullet.setVelocityY(0);
+                break;
+            case "right":
+                bullet.setPosition(player.x + 16, player.y);
+                bullet.setVelocityX(200);
+                bullet.setVelocityY(0);
+                break;
+        }
+
+        // Activate bullet and make it visible
+        bullet.setActive(true);
+        bullet.setVisible(true);
+
+        // Play the bullet animation
+        bullet.anims.play("bulletAnim", true);
     }
-
-    // Activate bullet and make it visible
-    bullet.setActive(true);
-    bullet.setVisible(true);
-
-    // Play the bullet animation
-    bullet.anims.play("bulletAnim", true);
-  }
 }
 
 function roundTo(value, step) {
