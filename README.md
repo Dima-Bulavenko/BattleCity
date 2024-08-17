@@ -2,7 +2,7 @@
 
 *Created by:* <strong>8-Bit Alchemists</strong>
 
-[View the deployed game here](*ENTER DEPLOYED SITE URL*)
+View the deployed game [here](https://dima-bulavenko.github.io/BattleCity/).
 
 ---
 
@@ -12,12 +12,14 @@
 ### User Stories
 
 As a player I want to:
+- Read instructions on how to play the game
 - See my tank interacting in the game environment
 - Control my tanks movements using arrow keys
 - Rotate my tank when changing directions
 - Fire bullets so I can defeat my opponent
 - See my score displayed on the screen so I can track my progress
 - See my how many lives I have remaining
+- Exit the gameplay (/to read instrucitons)
 
 ---
 
@@ -94,7 +96,7 @@ Please see [TESTING.md](TESTING.md) for a comprehensive list of tests performed.
 
 
 
-The live link can be found here - *INSERT LINK*
+The live link can be found [here](https://dima-bulavenko.github.io/BattleCity/).
 
 
 ---
@@ -118,3 +120,5 @@ The live link can be found here - *INSERT LINK*
 [Nonty Dazana](https://github.com/NontyD)
 
 ### Acknowledgemnets
+
+We would like to thank Code Institute for hosting Pixel Pioneers.
