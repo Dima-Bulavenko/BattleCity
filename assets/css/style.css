@@ -6,13 +6,16 @@ body, html {
     width: 100%;
     height: 80%;
     font-family: 'Press Start 2P', cursive;
-    background-color: #000; /* Black background */
     color: #fff; 
     image-rendering: pixelated; /* Ensures that images remain pixelated */
+    background-image: url('/assets/images/preview2_6.png'); 
+    background-size: cover; 
+    background-position: center; 
+    background-repeat: no-repeat;
 }
 
 body {
-    cursor: url('assets/images/pixel-cursor.png'), auto;
+    cursor: url('/assets/images/arrow-157245_640.png'), auto;
 }
 
 
@@ -22,12 +25,12 @@ body {
     max-width: 800px;
     height: 80vh;
     margin: 50px auto;
-    border: 4px solid #fff;
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+    border: 4px solid #15bb15;
+    box-shadow: 0 0 20px #00FF00;
     background: url('/assets/images/pixel-art-old-video-game-console-landscape-background-retro-style-8-bit-game-ai_985124-2227.avif'); /* Add a pixel grid background */
     background-size: cover;
+    border-radius: 8px;
 }
-
 
 #game-container {
     display: flex;

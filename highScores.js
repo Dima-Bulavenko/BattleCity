@@ -41,7 +41,12 @@ function closeModal(modalId) {
 document.getElementById('high-scores-button').addEventListener('click', openHighScoresModal);
 
 // After the game ends and you have the player's score
-let playerScore = 1200; // Example score, replace with actual game score
-let playerName = prompt("Enter your name:"); // Prompt the player for their name
+//function endGame(playerScore) {
+ //   let playerName = "Player1"; // Replace this with the desired player name or set dynamically
+ //   addHighScore(playerScore, playerName);
+ //   openHighScoresModal(); // Automatically show the high scores modal after the game ends
+//}
 
-addHighScore(playerScore, playerName);
+// Example usage: Trigger endGame with a score when the game ends
+let finalScore = 1200; // Replace with the actual final score when the game ends
+endGame(finalScore);
