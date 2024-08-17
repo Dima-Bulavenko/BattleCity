@@ -13,8 +13,9 @@
 </head>
 <body>
     <div id="game-container">
+
         <!-- Game Canvas -->
-        <div id="phaser-game"></div>
+         <div id="phaser-game"></div>
 
         <!-- HUD (Heads-Up Display) -->
         <div id="hud">
@@ -34,6 +35,7 @@
             <button id="high-scores-button">High Scores</button>
         </div>
 
+         <!-- Instructions modal -->
         <div id="instructions-modal" class="modal">
             <div class="modal-content">
                 <span class="close">&times;</span>
@@ -43,7 +45,17 @@
                 <p>Destroy enemy tanks to score points!</p>
             </div>
         </div>
+
+        <!-- Highscores modal -->
+        <div id="highScoresModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal('highScoresModal')">&times;</span>
+                <h2>High Scores</h2>
+                <div id="highscore-list"></div>
+            </div>
+        </div>
         
+
         <!-- Speaker Button -->
         <button id="speaker-button">
             <img id="speaker-icon" src="assets/images/volume.png" alt="Speaker On">
@@ -53,6 +65,7 @@
         <div id="game-over">GAME OVER</div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/phaser@v3.80.1/dist/phaser.min.js"></script>
+    <script src="highScores.js"></script>
     <script src="indexDG.js"></script>
     <script src="main.js"></script>
 </body>

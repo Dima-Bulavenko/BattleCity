@@ -4,15 +4,18 @@ body, html {
     margin: 0;
     padding: 0;
     width: 100%;
-    height: 100%;
+    height: 80%;
     font-family: 'Press Start 2P', cursive;
-    background-color: #000; /* Black background */
-    color: #fff; /* White text */
+    color: #fff; 
     image-rendering: pixelated; /* Ensures that images remain pixelated */
+    background-image: url('/assets/images/preview2_6.png'); 
+    background-size: cover; 
+    background-position: center; 
+    background-repeat: no-repeat;
 }
 
 body {
-    cursor: url('assets/images/pixel-cursor.png'), auto;
+    cursor: url('/assets/images/arrow-157245_640.png'), auto;
 }
 
 
@@ -23,15 +26,12 @@ body {
     height: 80vh;
     min-height: 400px; /* Added min-height and adjust as neccessary */
     margin: 50px auto;
-    border: 4px solid #fff;
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+    border: 4px solid #15bb15;
+    box-shadow: 0 0 20px #00FF00;
     background: url('/assets/images/pixel-art-old-video-game-console-landscape-background-retro-style-8-bit-game-ai_985124-2227.avif'); /* Add a pixel grid background */
     background-size: cover;
-    box-sizing: border-box; /* Added box sizing */
-    z-index: 1;   /* Added z-index */
-    overflow: hidden; /* Added this line */
+    border-radius: 8px;
 }
-
 
 #game-container {
     display: flex;
@@ -43,7 +43,7 @@ body {
 
 #phaser-game {
     width: 100%;
-    height: 100%; /* Changed from 80% to 100% */
+    height: 70%;
     display: block;
     image-rendering: pixelated;
     background-color: #333; 
@@ -80,7 +80,7 @@ body {
     transition: background-color 0.3s, transform 0.1s;
     animation: pulse 1.5s infinite;
     background-color: #42ae42; /* Green background for the Start button */
-    color: #000; /* Black text for contrast */
+    color: #000; 
     box-shadow: 0 0 10px #FFD700, 0 0 20px #FFD700, 0 0 30px #FFD700;
     font-family: 'Press Start 2P', cursive;
 }
@@ -103,7 +103,7 @@ body {
 
 #start-button:hover {
     background-color: #FFD700; /* Gold background on hover */
-    color: #000; /* Black text */
+    color: #000;
     border-color: #00FF00; /* Green border on hover */
     box-shadow: 0 0 5px #00FF00, 0 0 10px #00FF00;
 }
@@ -140,6 +140,7 @@ body {
     transform: scale(1.1);
     filter: drop-shadow(2px 2px 2px #000);
 }
+
 /*Instruction modal*/
 .modal {
     display: none;
@@ -170,7 +171,7 @@ body {
 
 .modal-content h2 {
     font-size: 24px;
-    color: #FFD700; /* Gold color for headings */
+    color: #FFD700; 
     text-shadow: 2px 2px #000; /* Shadow effect for 3D look */
     margin-bottom: 20px;
 }
@@ -195,6 +196,18 @@ body {
     cursor: pointer;
 }
 
+/* High Scores Modal */
+#highScoresModal .modal-content {
+    background-color: #222;
+    margin: 5% auto;
+    padding: 20px;
+    border: 4px solid #888;
+    width: 70%;
+    color: #00FF00;
+    font-family: 'Press Start 2P', cursive;
+    box-shadow: 0 0 10px #00FF00, 0 0 20px #00FF00, 0 0 30px #00FF00;
+    text-align: center;
+}
 
 
 #game-over {
