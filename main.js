@@ -308,3 +308,54 @@ function setTankCollision(tank){
   this.physics.add.collider(tank, armorWallLayer);
   this.physics.add.collider(tank, eagleLayer);
 }
+
+
+/**
+ * Set tank animation
+ * Invoke in the create() using this syntax: 
+ * setTankCollision.call(this, tank);
+ */
+function setTankAnimation(tankSprites, tank) {
+  let prefix = tank.type;
+  if (this.anims.exists(`${prefix}_moveUp`)) return;
+
+  this.anims.create({
+    key: `${prefix}_moveUp`,
+    frames: this.anims.generateFrameNumbers(tankSprites, {
+      start: 0,
+      end: 1,
+    }),
+    frameRate: 5,
+    repeat: -1,
+  });
+
+  this.anims.create({
+    key: `${prefix}_moveLeft`,
+    frames: this.anims.generateFrameNumbers(tankSprites, {
+      start: 2,
+      end: 3,
+    }),
+    frameRate: 5,
+    repeat: -1,
+  });
+
+  this.anims.create({
+    key: `${prefix}_moveDown`,
+    frames: this.anims.generateFrameNumbers(tankSprites, {
+      start: 4,
+      end: 5,
+    }),
+    frameRate: 5,
+    repeat: -1,
+  });
+
+  this.anims.create({
+    key: `${prefix}_moveRight`,
+    frames: this.anims.generateFrameNumbers(tankSprites, {
+      start: 6,
+      end: 7,
+    }),
+    frameRate: 5,
+    repeat: -1,
+  });
+}
