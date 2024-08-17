@@ -65,7 +65,7 @@ function preload() {
 
     // Preload the music file
     this.load.audio('retroMusic', 'assets/sounds/248117__zagi2__retro-gaming-loop.ogg');
-    this.load.audtio('gameOverSound', 'assets/sounds/battle_city_8_bit_game_over');
+    this.load.audio('gameOverSound', 'assets/sounds/battle_city_8_bit_game_over');
 }
 
 // Create game objects and add music
@@ -161,8 +161,7 @@ function update() {
 
   if (enemies) {
     enemies.children.iterate(function (enemy) {
-      // enemy.direction = 'right'
-      moveTank('down', enemy)
+      moveTank(enemy.direction, enemy)
     });
   }
 }
@@ -298,6 +297,8 @@ function createEnemyTank(x, y, type) {
 
   // Create an enemy sprite and set its initial position
   const enemy = enemies.create(x, y, `${type}Sprites`);
+  changeEnemyDirectionRandomly.call(this, enemy)
+
   return enemy;
 }
 
@@ -423,4 +424,30 @@ function onGameOver() {
         loop: true,
         volume: 0.3
     });
+}
+// Function to generate a random delay between min and max milliseconds
+function getRandomDelay(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+// Function to change enemy direction and reset the timer with a new random delay
+function changeEnemyDirectionRandomly(enemy) {
+    changeEnemyDirection(enemy); // Change the enemy's direction
+    // Reset the timer with a new random delay
+    const minDelay = 1000;
+    const maxDelay = 2000;
+    this.time.addEvent({
+        delay: getRandomDelay(minDelay, maxDelay),
+        callback: changeEnemyDirectionRandomly,
+        callbackScope: this,
+        loop: false, // Do not loop, we'll manually reset it
+        args: [enemy]
+    });
+}
+
+// Change enemy direction randomly
+function changeEnemyDirection(enemy) {
+    const directions = ['up', 'down', 'left', 'right'];
+    const newDirection = Phaser.Math.RND.pick(directions);
+    enemy.direction = newDirection;
 }
