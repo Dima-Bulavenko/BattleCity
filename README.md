@@ -1,4 +1,4 @@
-# *Battle City*
+# Battle City
 
 *Created by:* <strong>8-Bit Alchemists</strong>
 
