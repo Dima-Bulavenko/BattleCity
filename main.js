@@ -181,28 +181,31 @@ function fireBullet() {
         console.log("Player direction:", player.direction); // Debug log
 
         bullet.enableBody(true, player.x, player.y, true);
-
+        bullet.setSize(16, 16);
+        bullet.setOffset(0, 0);
         bullet.setFrame(217);
+        bullet.setCollideWorldBounds(true)
+
         // Set bullet position
         switch (player.direction) {
             case "up":
                 bullet.setPosition(player.x, player.y - 16);
-                bullet.setVelocityY(-200);
+                bullet.setVelocityY(-150);
                 bullet.setVelocityX(0);
                 break;
             case "down":
                 bullet.setPosition(player.x, player.y + 16);
-                bullet.setVelocityY(200);
+                bullet.setVelocityY(150);
                 bullet.setVelocityX(0);
                 break;
             case "left":
                 bullet.setPosition(player.x - 16, player.y);
-                bullet.setVelocityX(-200);
+                bullet.setVelocityX(-150);
                 bullet.setVelocityY(0);
                 break;
             case "right":
                 bullet.setPosition(player.x + 16, player.y);
-                bullet.setVelocityX(200);
+                bullet.setVelocityX(150);
                 bullet.setVelocityY(0);
                 break;
         }
@@ -211,6 +214,8 @@ function fireBullet() {
         bullet.setActive(true);
         bullet.setVisible(true);
 
+        bullet.body.enable = true;
+
         // Play the bullet animation
         bullet.anims.play("bulletAnim", true);
     }
@@ -218,9 +223,9 @@ function fireBullet() {
 
 // Function that handles bullet collision
 function setBulletCollision() {
-  this.physics.add.collider(bullets, wallLayer, bulletHitsWall, null, this);
-  this.physics.add.collider(bullets, armorWallLayer, bulletHitsWall, null, this);
-  this.physics.add.collider(bullets, eagleLayer, bulletHitsEagle, null, this);
+  this.physics.add.overlap(bullets, wallLayer, bulletHitsWall, null, this);
+  this.physics.add.overlap(bullets, armorWallLayer, bulletHitsWall, null, this);
+  this.physics.add.overlap(bullets, eagleLayer, bulletHitsEagle, null, this);
 }
 
 // Function to ensure bullet is destroyed after collision
@@ -228,7 +233,11 @@ function bulletHitsWall(bullet, tile) {
   console.log("bullet hits wall")
   bullet.setVelocity(0);
   bullet.disableBody(true, true);
-  wallLayer.removeTileAt(tile.x, tile.y);
+
+  const layer = tile.layer.tilemapLayer;
+  if (layer) {
+      layer.removeTileAt(tile.x, tile.y);
+  }
 }
 
 function bulletHitsEagle(bullet, tile) {
