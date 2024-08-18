@@ -396,8 +396,32 @@ function setTankCollision(tank){
   this.physics.add.collider(tank, wallLayer);
   this.physics.add.collider(tank, armorWallLayer);
   this.physics.add.collider(tank, eagleLayer);
+
+  if (tank.type==="player") {
+    this.physics.add.collider(tank, enemies, playerEnemyCollide, null, this);
+  }
+  
+  if (tank.type=== "enemy") {
+    tank.setImmovable(true);
+    this.physics.add.collider(tank, player, playerEnemyCollide, null, this)
+    this.physics.add.collider(tank, enemies);   
+    console.log("enemy moves tank")
+  }
 }
 
+/**
+ * function that handles enemy and player tank collision
+ * **/ 
+function playerEnemyCollide(player, enemy) {
+    // Stop movement for both tanks
+    player.setVelocity(0);
+    
+    console.log("tanks collide");
+
+    if(enemy.active) {
+        enemy.setVelocity(0);
+    }
+}
 
 /**
  * Set tank animation
