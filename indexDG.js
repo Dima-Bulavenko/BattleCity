@@ -1,54 +1,35 @@
+// Retro audio
+const buttonClickSound = new Audio('assets/sounds/click.wav');
+const buttonHoverSound = new Audio('assets/sounds/hover.wav');
+const menuMusic = new Audio('assets/sounds/248117__zagi2__retro-gaming-loop.ogg');
 
-// Menu Music
-let menuMusic;
-
-// Preload the menu music file in Phaser's preload function
-function preload() {
-    this.load.audio('menuMusic', 'assets/sounds/menu-music.ogg');
-}
-
-function create() {
-    // Add and play the menu music immediately when the menu is shown
-    menuMusic = this.sound.add('menuMusic');
-    menuMusic.play({
-        loop: true,
-        volume: 0.3
+// Start playing the menu music automatically when the page loads
+window.addEventListener('load', () => {
+    menuMusic.loop = true;
+    menuMusic.volume = 0.3;
+    menuMusic.play().catch(function (error) {
+        console.log('Music playback prevented. User interaction required.', error);
     });
-}
+});
 
-// Start Game
 function startGame() {
-    // Stop the menu music
-    if (menuMusic && menuMusic.isPlaying) {
-        menuMusic.stop();
+    // Stop the menu music when the game starts
+    if (menuMusic && !menuMusic.paused) {
+        menuMusic.pause();
     }
 
-    // Hide the main menu
     document.getElementById('main-menu').style.display = 'none';
-    
-    // Show the game container
-    document.getElementById('phaser-game').style.display = 'block';
+    document.getElementById('game-container').style.display = 'block';
 
-    gameContainer.style.display = 'block';
-    phaserGame.style.position = 'absolute'; // Ensure the game is correctly positioned
-    phaserGame.style.top = '110px'; // Keep the game within the bounds of the container
-
-    // Start the Phaser game instance
+    // Start the Phaser game
     game = new Phaser.Game(config);
 }
 
-document.getElementById('start-button').addEventListener('click', startGame);
-
-// Retro audio 
-const buttonClickSound = new Audio('assets/sounds/click.wav');
-const buttonHoverSound = new Audio('assets/sounds/hover.wav');
-
-// Play click sound when the start button is clicked
 document.getElementById('start-button').addEventListener('click', () => {
     buttonClickSound.play();
+    startGame();
 });
 
-// Play hover sound when hovering over the start button
 document.getElementById('start-button').addEventListener('mouseover', () => {
     buttonHoverSound.play();
 });
