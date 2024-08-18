@@ -1,4 +1,5 @@
 let currentScore = 0;
+let playerLives = 3; // Player starts with 3 lives
 
 //  Logic to increase the score when an enemy is destroyed.
 function initializeScore() {
@@ -14,6 +15,31 @@ function increaseScore(amount) {
     currentScore += amount;
     updateScoreDisplay();
 }
+
+
+// Function to update the lives display on the HUD
+function updateLivesDisplay() {
+    const livesElement = document.getElementById('lives');
+    livesElement.textContent = `Lives: ${playerLives}`;
+}
+
+// Function to handle when the player is hit
+function playerHit() {
+    playerLives -= 1; // Decrease player lives by 1
+
+    // Update the lives display
+    updateLivesDisplay();
+
+    // Check if the player has no lives left
+    if (playerLives <= 0) {
+        showGameOver(); // Trigger game over
+    } else {
+        // Update the health bar accordingly
+        const healthPercentage = (playerLives / 3) * 100; // Assuming 3 lives means 100%
+        updateHealthBar(healthPercentage);
+    }
+}
+
 
 
 // Function to get high scores from localStorage

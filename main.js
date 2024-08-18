@@ -244,6 +244,10 @@ function bulletHitsTank(bullet, tank) {
         destroyTank(tank);
     }
     bullet.destroy();
+
+    if (tank.type === 'player') {
+        playerHit(); // Call playerHit() when the player is hit
+    }
 }
 
 function destroyTank(tank) {
