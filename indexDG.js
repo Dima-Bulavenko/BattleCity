@@ -1,24 +1,63 @@
-
-//Start Game
+// Function to start the game
 function startGame() {
+    // Hide the main menu and show the Phaser game canvas
     document.getElementById('main-menu').style.display = 'none';
     document.getElementById('phaser-game').style.display = 'block';
+
+    // Play the button click sound
+    buttonClickSound.play();
+
+    // Start the Phaser game scene
+    game.scene.start('GameScene');
+
+    // Add a delay before enemies start moving
+    game.scene.scenes[0].time.delayedCall(500, () => {
+    // Functionality to start enemy movement
+    startEnemyMovement(game.scene.scenes[0]);
+    });
+
+    // Add a delay before enemies start shooting (e.g., 3 seconds)
+    game.scene.scenes[0].time.delayedCall(3000, () => {
+        // Functionality to start enemy shooting
+        startEnemyShooting(game.scene.scenes[0]);
+    });
 }
 
+/**
+ * Function to start enemy movement
+**/ 
+function startEnemyMovement(scene) {
+    if (scene.enemies) {
+        scene.enemies.children.iterate(function (enemy) {
+            // Start random movement and shooting
+            changeEnemyDirectionRandomly.call(scene, enemy);
+            shootRandomly.call(scene, enemy);
+        });
+    }
+}
+
+/**
+* Function to start enemy shooting
+*/
+function startEnemyShooting(scene) {
+    if (scene.enemies) {
+        scene.enemies.children.iterate(function (enemy) {
+            // Start random shooting
+            shootRandomly.call(scene, enemy);
+        });
+    }
+}
+
+// Attach event listeners to the start button
 document.getElementById('start-button').addEventListener('click', startGame);
-
-//Retro audio 
-const buttonClickSound = new Audio('assets/sounds/click.wav');
-const buttonHoverSound = new Audio('assets/sounds/hover.wav');
-
-document.getElementById('start-button').addEventListener('click', () => {
-    buttonClickSound.play();
-    this.scene.start('GameScene'); // Start the game scene in Phaser
-});
 
 document.getElementById('start-button').addEventListener('mouseover', () => {
     buttonHoverSound.play();
 });
+
+// Retro audio setup
+const buttonClickSound = new Audio('assets/sounds/click.wav');
+const buttonHoverSound = new Audio('assets/sounds/hover.wav');
 
 
     // Example: Initial health set to 100%
