@@ -117,6 +117,14 @@ function create() {
 
     // Enable cursor keys for player movement
     cursors = this.input.keyboard.createCursorKeys();
+
+    // Set up a timer to spawn enemy tanks every 7 seconds
+    this.time.addEvent({
+        delay: 7000, // (7 seconds)
+        callback: generateEnemy,
+        callbackScope: this,
+        loop: true
+    });
 }
 
 // Toggle the music on and off
@@ -162,25 +170,27 @@ function fireBullet(tank) {
         return; // Exit if there is already an active bullet
     }
     
-    const bullet = createBullet.call(this);
+    const bullet = createBullet.call(this, tank);
     if (bullet) {
-        tank.activeBullet = bullet; // Set the active bullet
+        tank.activeBullet = bullet;
+        const bulletShift = (tileSize / 2 + bullet.width);
+        const bulletVelocity = 200;
         switch (tank.direction) {
             case "up":
-                bullet.setPosition(tank.x, tank.y);
-                bullet.setVelocityY(-200);
+                bullet.setVelocityY(-bulletVelocity);
+                bullet.setPosition(tank.x, tank.y - bulletShift)
                 break;
             case "down":
-                bullet.setPosition(tank.x, tank.y);
-                bullet.setVelocityY(200);
+                bullet.setPosition(tank.x, tank.y + bulletShift )
+                bullet.setVelocityY(bulletVelocity);
                 break;
             case "left":
-                bullet.setPosition(tank.x, tank.y);
-                bullet.setVelocityX(-200);
+                bullet.setPosition(tank.x - bulletShift, tank.y)
+                bullet.setVelocityX(-bulletVelocity);
                 break;
             case "right":
-                bullet.setPosition(tank.x, tank.y);
-                bullet.setVelocityX(200);
+                bullet.setPosition(tank.x + bulletShift, tank.y)
+                bullet.setVelocityX(bulletVelocity);
                 break;
         }
         // Listen for when the bullet is destroyed
@@ -196,25 +206,33 @@ function setBulletCollision() {
   this.physics.add.collider(bullets, armorWallLayer, bulletHitsWall, null, this);
   this.physics.add.collider(bullets, eagleLayer, bulletHitsEagle, null, this);
     //   // Add collision detection between bullets and tanks
-    //   this.physics.add.collider(bullets, player, bulletHitsTank, null, this);
-      this.physics.add.collider(bullets, enemies, bulletHitsTank, null, this);
+      this.physics.add.collider(bullets, player, bulletHitsPlayer, null, this);
+      this.physics.add.collider(bullets, enemies, bulletHitsEnemy, null, this);
 }
 
+function bulletHitsPlayer(tank, bullet) {
+    bulletHitsTank(bullet, tank);
+}
+function bulletHitsEnemy(bullet, tank) {
+    bulletHitsTank(bullet, tank);
+}
 
 function bulletHitsTank(bullet, tank) {
-    if (bullet) {
-        console.log("Bullet exists, destroying bullet:", bullet);
-        bullet.destroy(); // If this line is uncommented error comes up
-    } else {
-        console.error("Bullet is undefined");
+    if (tank.type === bullet.tank.type) {
+        bullet.destroy();
+        return;
     }
 
-    if (tank) {
-        console.log("Tank exists, destroying tank:", tank);
-        tank.destroy();
-    } else {
-        console.error("Tank is undefined");
+    tank.health -= 1;
+    if (tank.health <= 0) {
+        destroyTank(tank);
     }
+    bullet.destroy();
+}
+
+function destroyTank(tank) {
+    tank.destroy();
+    tank.isDestroyed = true;
 }
 
 // Function to ensure bullet is destroyed after collision
@@ -280,6 +298,7 @@ function createTank(x, y, type) {
 
     if (tank) {
       tank.type = type;
+      tank.isDestroyed = false;
       setTankCollision.call(this, tank);
       setTankAnimation.call(this, `${tank.type}Sprites`, tank);
     }
@@ -318,18 +337,22 @@ function createEnemyTank(x, y, type) {
   // Create an enemy sprite and set its initial position
   const enemy = enemies.create(x, y, `${type}Sprites`);
   changeEnemyDirectionRandomly.call(this, enemy)
+  shootRandomly.call(this, enemy)
   enemy.health = 1;
   return enemy;
 }
 
-function createBullet() {
+function createBullet(tank) {
     if (!bullets) {
        bullets = this.physics.add.group();
         setBulletCollision.call(this, bullets);
     }
-   const bullet = bullets.create(100, 100, "bulletSprites");
+    
+   let bullet = bullets.create(0, 0, "bulletSprites");
+   bullet.type = 'bullet'
    // Set bullet collision with world bounds
    bullet.setCollideWorldBounds(true);
+   bullet.tank = tank;
    // Destroy the bullet when it collides with world bounds
    bullet.body.onWorldBounds = true;
    this.physics.world.on('worldbounds', (body) => {
@@ -471,6 +494,9 @@ function getRandomDelay(min, max) {
 
 // Function to change enemy direction and reset the timer with a new random delay
 function changeEnemyDirectionRandomly(enemy) {
+    if (enemy.isDestroyed) {
+        return;
+    }
     changeEnemyDirection(enemy); // Change the enemy's direction
     // Reset the timer with a new random delay
     const minDelay = 1000;
@@ -489,4 +515,30 @@ function changeEnemyDirection(enemy) {
     const directions = ['up', 'down', 'left', 'right'];
     const newDirection = Phaser.Math.RND.pick(directions);
     enemy.direction = newDirection;
+}
+
+function shootRandomly(tank) {
+    if (tank.isDestroyed) {
+        return;
+    }
+    const minDelay = 1000;
+    const maxDelay = 1500;
+    fireBullet.call(this, tank);
+    const delay = getRandomDelay(minDelay, maxDelay);
+    this.time.addEvent({
+        delay: delay,
+        callback:  shootRandomly,
+        callbackScope: this,
+        loop: false,
+        args: [tank]
+    });
+}
+
+function generateEnemy() {
+    if (enemies.children.size >= 7) {
+        return;
+    }
+    positions = [[304, 204], [400, 204], [496, 292]]
+    const [x, y] = Phaser.Math.RND.pick(positions);
+    createTank.call(this, x, y, 'enemy');
 }
