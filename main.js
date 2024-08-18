@@ -59,6 +59,14 @@ function preload() {
     createSpriteSet.call(this, 'playerSprites', 0, 7);
     createSpriteSet.call(this, 'enemySprites', 8, 15);
 
+    // Load bullet spriteset
+    this.load.spritesheet("bulletSprites", "assets/tiles.png", {
+        frameWidth: 8,
+        frameHeight: 8,
+        startFrame: 9,
+        endFrame: 9, 
+    });
+
     // Load the field image
     this.load.image('battleCityField', 'assets/battle_city_stage_01.png');
     this.load.tilemapTiledJSON("map", "assets/map1.json");
@@ -97,30 +105,6 @@ function create() {
 
     // Set world bounds to match the field size
     this.physics.world.setBounds(mapX, mapY, mapWidth, mapHeight);
-
-    // Create bullet group
-    bullets = this.physics.add.group({
-        defaulKey: "battlecitySprites",
-        frame: 217,
-        maxSize: -1,
-        bounceX: 0,
-        bounceY: 0,
-        setCollideWorldBounds: true
-    });
-
-    // Create bullet animation
-    this.anims.create({
-        key: "bulletAnim",
-        frames: this.anims.generateFrameNumbers("battleCitySprites", {
-            start: 217,
-            end: 217,
-        }),
-        frameRate: 10,
-        repeat: -1,
-    });
-
-    // Set up bullet collisions
-    setBulletCollision.call(this, bullets);
   
   // Create player tank
   createTank.call(this, 304, 204, 'player');
@@ -161,58 +145,47 @@ function update() {
 
   // handle firing when spacebar is pressed
   if (Phaser.Input.Keyboard.JustDown(fireKey)) {
-    fireBullet();
+    fireBullet.call(this, player);
   }
 
   if (enemies) {
     enemies.children.iterate(function (enemy) {
-      // enemy.direction = 'right'
-      moveTank('down', enemy)
+      moveTank(enemy.direction, enemy)
     });
   }
 }
 
-// Function that handles shooting
-function fireBullet() {
-    const bullet = bullets.get();
-
+function fireBullet(tank) {
+    // Check if the tank already has an active bullet
+    if (tank.activeBullet) {
+        return; // Exit if there is already an active bullet
+    }
+    
+    const bullet = createBullet.call(this);
     if (bullet) {
-        console.log("Bullet obtained"); // Debug log
-        console.log("Player direction:", player.direction); // Debug log
-
-        bullet.enableBody(true, player.x, player.y, true);
-
-        bullet.setFrame(217);
-        // Set bullet position
-        switch (player.direction) {
+        tank.activeBullet = bullet; // Set the active bullet
+        switch (tank.direction) {
             case "up":
-                bullet.setPosition(player.x, player.y - 16);
+                bullet.setPosition(tank.x, tank.y);
                 bullet.setVelocityY(-200);
-                bullet.setVelocityX(0);
                 break;
             case "down":
-                bullet.setPosition(player.x, player.y + 16);
+                bullet.setPosition(tank.x, tank.y);
                 bullet.setVelocityY(200);
-                bullet.setVelocityX(0);
                 break;
             case "left":
-                bullet.setPosition(player.x - 16, player.y);
+                bullet.setPosition(tank.x, tank.y);
                 bullet.setVelocityX(-200);
-                bullet.setVelocityY(0);
                 break;
             case "right":
-                bullet.setPosition(player.x + 16, player.y);
+                bullet.setPosition(tank.x, tank.y);
                 bullet.setVelocityX(200);
-                bullet.setVelocityY(0);
                 break;
         }
-
-        // Activate bullet and make it visible
-        bullet.setActive(true);
-        bullet.setVisible(true);
-
-        // Play the bullet animation
-        bullet.anims.play("bulletAnim", true);
+        // Listen for when the bullet is destroyed
+        bullet.on('destroy', () => {
+            tank.activeBullet = null; // Allow the tank to fire again
+        });
     }
 }
 
@@ -221,18 +194,36 @@ function setBulletCollision() {
   this.physics.add.collider(bullets, wallLayer, bulletHitsWall, null, this);
   this.physics.add.collider(bullets, armorWallLayer, bulletHitsWall, null, this);
   this.physics.add.collider(bullets, eagleLayer, bulletHitsEagle, null, this);
+    //   // Add collision detection between bullets and tanks
+    //   this.physics.add.collider(bullets, player, bulletHitsTank, null, this);
+    //   this.physics.add.collider(bullets, enemies, bulletHitsTank, null, this);
+}
+
+
+function bulletHitsTank(bullet, tank) {
+    if (bullet) {
+        console.log("Bullet exists, destroying bullet:", bullet);
+        // bullet.destroy(); // If this line is uncommented error comes up
+    } else {
+        console.error("Bullet is undefined");
+    }
+
+    if (tank) {
+        console.log("Tank exists, destroying tank:", tank);
+        tank.destroy();
+    } else {
+        console.error("Tank is undefined");
+    }
 }
 
 // Function to ensure bullet is destroyed after collision
 function bulletHitsWall(bullet, tile) {
-  console.log("bullet hits wall")
-  bullet.setVelocity(0);
-  bullet.disableBody(true, true);
+  bullet.destroy();
   wallLayer.removeTileAt(tile.x, tile.y);
 }
 
 function bulletHitsEagle(bullet, tile) {
-  bullet.disableBody(true, true);
+    bullet.destroy();
 }
 
 function roundTo(value, step) {
@@ -306,6 +297,7 @@ function createPlayerTank(x, y, type='player') {
     if (player) return player;
 
     player = this.physics.add.sprite(x, y, `${type}Sprites`);
+    player.health = 3;
     return player;
 }
 
@@ -322,10 +314,30 @@ function createEnemyTank(x, y, type) {
   if (!enemies) {
       enemies = this.physics.add.group();
   }
-
   // Create an enemy sprite and set its initial position
   const enemy = enemies.create(x, y, `${type}Sprites`);
+  changeEnemyDirectionRandomly.call(this, enemy)
+  enemy.health = 1;
   return enemy;
+}
+
+function createBullet() {
+    if (!bullets) {
+       bullets = this.physics.add.group();
+        setBulletCollision.call(this, bullets);
+    }
+   const bullet = bullets.create(100, 100, "bulletSprites");
+   // Set bullet collision with world bounds
+   bullet.setCollideWorldBounds(true);
+   // Destroy the bullet when it collides with world bounds
+   bullet.body.onWorldBounds = true;
+   this.physics.world.on('worldbounds', (body) => {
+       if (body.gameObject === bullet) {
+           bullet.destroy();
+       }
+   });
+
+   return bullet;
 }
 
 /**
@@ -435,4 +447,31 @@ function setTankAnimation(tankSprites, tank) {
     frameRate: 5,
     repeat: -1,
   });
+}
+
+// Function to generate a random delay between min and max milliseconds
+function getRandomDelay(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+// Function to change enemy direction and reset the timer with a new random delay
+function changeEnemyDirectionRandomly(enemy) {
+    changeEnemyDirection(enemy); // Change the enemy's direction
+    // Reset the timer with a new random delay
+    const minDelay = 1000;
+    const maxDelay = 2000;
+    this.time.addEvent({
+        delay: getRandomDelay(minDelay, maxDelay),
+        callback: changeEnemyDirectionRandomly,
+        callbackScope: this,
+        loop: false, // Do not loop, we'll manually reset it
+        args: [enemy]
+    });
+}
+
+// Change enemy direction randomly
+function changeEnemyDirection(enemy) {
+    const directions = ['up', 'down', 'left', 'right'];
+    const newDirection = Phaser.Math.RND.pick(directions);
+    enemy.direction = newDirection;
 }
