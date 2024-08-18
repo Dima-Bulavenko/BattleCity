@@ -116,6 +116,14 @@ function create() {
 
     // Enable cursor keys for player movement
     cursors = this.input.keyboard.createCursorKeys();
+
+    // Set up a timer to spawn enemy tanks every 7 seconds
+    this.time.addEvent({
+        delay: 7000, // (7 seconds)
+        callback: generateEnemy,
+        callbackScope: this,
+        loop: true
+    });
 }
 
 // Toggle the music on and off
@@ -509,4 +517,13 @@ function shootRandomly(tank) {
         loop: false,
         args: [tank]
     });
+}
+
+function generateEnemy() {
+    if (enemies.children.size >= 7) {
+        return;
+    }
+    positions = [[304, 204], [400, 204], [496, 292]]
+    const [x, y] = Phaser.Math.RND.pick(positions);
+    createTank.call(this, x, y, 'enemy');
 }
