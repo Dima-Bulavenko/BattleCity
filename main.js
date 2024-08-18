@@ -27,8 +27,21 @@ const config = {
     },
 };
 
+let game;
+
+// Function to initialize and start the game
+function startGame() {
+    // Hide the main menu
+    document.getElementById('main-menu').style.display = 'none';
+    
+    // Show the game container
+    document.getElementById('game-container').style.display = 'block';
+
 // Create the Phaser game instance
 const game = new Phaser.Game(config);
+
+// Event listener for the "Start" button
+document.getElementById('start-button').addEventListener('click', startGame);
 
 // Declare variables globally
 var player;

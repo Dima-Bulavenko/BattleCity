@@ -11,29 +11,23 @@
           <!-- Battle City Title -->
     <div id="battle-city-title">Battle City</div> 
 
-    <div id="game-container">
-        <img id="logo" src="/assets/images/logo.png" alt="Game Logo">
-    <div id="hud">
-        <div id="health-bar-container">
-            <div id="health-bar"></div>
-        </div>
-        <span id="score">Score: 0</span>
-        <span id="lives">Lives: 3</span>
-    </div>
-
-        <!-- Game Canvas -->
-         <div id="phaser-game"></div>
-
-        <!-- HUD (Heads-Up Display) -->
-        <div id="hud">
-            <div id="health-bar-container">
-                <div id="health-bar"></div>
+        <div id="game-container">
+            <div id="phaser-game"></div>
+            <!-- HUD elements -->
+            <div id="hud">
+                <div id="health-bar-container">
+                    <div id="health-bar"></div>
+                </div>
+                <span id="score">Score: 0</span>
+                <span id="lives">Lives: 3</span>
             </div>
-            <span id="score">Score: 0</span>
-            <span id="lives">Lives: 3</span>
+            <!-- Speaker Button -->
+            <button id="speaker-button">
+                <img id="speaker-icon" src="assets/images/volume.png" alt="Speaker">
+            </button>
         </div>
-        
-        <!-- Main Menu -->
+    
+        <!-- Main menu -->
         <div id="main-menu">
             <h1>Battle City</h1>
             <button id="start-button">Start Game</button>
@@ -42,7 +36,7 @@
         </div>
 
          <!-- Instructions modal -->
-        <div id="instructions-modal" class="modal">
+         <div id="instructions-modal" class="modal">
             <div class="modal-content">
                 <span class="close">&times;</span>
                 <h2>How to Play</h2>
@@ -60,16 +54,12 @@
                 <div id="highscore-list"></div>
             </div>
         </div>
-        
 
-        <!-- Speaker Button -->
-        <button id="speaker-button">
-            <img id="speaker-icon" src="assets/images/volume.png" alt="Speaker On">
-        </button>
-         
+        
+    
         
         <div id="game-over">GAME OVER</div>
-    </div>
+  </div>
     <script src="https://cdn.jsdelivr.net/npm/phaser@v3.80.1/dist/phaser.min.js"></script>
     <script src="highScores.js"></script>
     <script src="indexDG.js"></script>
