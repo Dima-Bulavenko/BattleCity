@@ -250,8 +250,14 @@ body {
 }
 
 @keyframes pixelate {
-    0% { filter: pixelate(0px); }
-    100% { filter: pixelate(5px); }
+    0%, 100% {
+        transform : scale(1);
+        box-shadow : 0 0 10px #fff;
+        }
+        50% {
+        transform : scale(1.1);
+        box-shadow : 0 0 20px rgb(189, 206, 63);
+        }
 }
 
 #phaser-game {
