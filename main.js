@@ -25,10 +25,19 @@ const config = {
             debug: false // Set to true if you want to see the collision boxes
         }
     },
+    autoStart: false // Prevent scene from starting automatically
 };
 
 // Create the Phaser game instance
 const game = new Phaser.Game(config);
+
+// Add the scene but don't start it
+game.scene.add('default', {
+    preload: preload,
+    create: create,
+    update: update
+}, false);
+
 
 // Declare variables globally
 var player;
@@ -108,7 +117,7 @@ function create() {
   
   // Create player tank
   createTank.call(this, 304, 204, 'player');
-  createTank.call(this, 304, 204, 'enemy');
+  createTank.call(this, 304 + tileSize, 204, 'enemy');
 
   // Enable cursor keys for player movement
   cursors = this.input.keyboard.createCursorKeys();
@@ -284,6 +293,13 @@ function createTank(x, y, type) {
     if (type === 'player') {
         tank = createPlayerTank.call(this, x, y, type);
     } else {
+        if (player && x === player.x && y === player.y) {
+            x += tileSize; // Move one tile to the right
+            // Ensure x stays within world bounds
+            if (x + tileSize > mapX + mapWidth) {
+                x -= 2 * tileSize; // Move two tiles to the left if out of bounds
+            }
+        }
         tank = createEnemyTank.call(this, x, y, type);
     }
 
