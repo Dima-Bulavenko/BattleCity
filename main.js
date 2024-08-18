@@ -161,25 +161,27 @@ function fireBullet(tank) {
         return; // Exit if there is already an active bullet
     }
     
-    const bullet = createBullet.call(this);
+    const bullet = createBullet.call(this, tank);
     if (bullet) {
-        tank.activeBullet = bullet; // Set the active bullet
+        tank.activeBullet = bullet;
+        const bulletShift = (tileSize / 2 + bullet.width);
+        const bulletVelocity = 200;
         switch (tank.direction) {
             case "up":
-                bullet.setPosition(tank.x, tank.y);
-                bullet.setVelocityY(-200);
+                bullet.setVelocityY(-bulletVelocity);
+                bullet.setPosition(tank.x, tank.y - bulletShift)
                 break;
             case "down":
-                bullet.setPosition(tank.x, tank.y);
-                bullet.setVelocityY(200);
+                bullet.setPosition(tank.x, tank.y + bulletShift )
+                bullet.setVelocityY(bulletVelocity);
                 break;
             case "left":
-                bullet.setPosition(tank.x, tank.y);
-                bullet.setVelocityX(-200);
+                bullet.setPosition(tank.x - bulletShift, tank.y)
+                bullet.setVelocityX(-bulletVelocity);
                 break;
             case "right":
-                bullet.setPosition(tank.x, tank.y);
-                bullet.setVelocityX(200);
+                bullet.setPosition(tank.x + bulletShift, tank.y)
+                bullet.setVelocityX(bulletVelocity);
                 break;
         }
         // Listen for when the bullet is destroyed
@@ -195,25 +197,26 @@ function setBulletCollision() {
   this.physics.add.collider(bullets, armorWallLayer, bulletHitsWall, null, this);
   this.physics.add.collider(bullets, eagleLayer, bulletHitsEagle, null, this);
     //   // Add collision detection between bullets and tanks
-    //   this.physics.add.collider(bullets, player, bulletHitsTank, null, this);
+      this.physics.add.collider(player, bullets,  bulletHitsTank, null, this);
       this.physics.add.collider(bullets, enemies, bulletHitsTank, null, this);
 }
 
-
 function bulletHitsTank(bullet, tank) {
-    if (bullet) {
-        console.log("Bullet exists, destroying bullet:", bullet);
-        bullet.destroy(); // If this line is uncommented error comes up
-    } else {
-        console.error("Bullet is undefined");
+    if (tank.type === bullet.tank.type) {
+        bullet.destroy();
+        return;
     }
 
-    if (tank) {
-        console.log("Tank exists, destroying tank:", tank);
-        tank.destroy();
-    } else {
-        console.error("Tank is undefined");
+    tank.health -= 1;
+    if (tank.health <= 0) {
+        destroyTank(tank);
     }
+    bullet.destroy();
+    tank.destroy();
+}
+
+function destroyTank(tank) {
+    tank.destroy();
 }
 
 // Function to ensure bullet is destroyed after collision
@@ -321,14 +324,17 @@ function createEnemyTank(x, y, type) {
   return enemy;
 }
 
-function createBullet() {
+function createBullet(tank) {
     if (!bullets) {
        bullets = this.physics.add.group();
         setBulletCollision.call(this, bullets);
     }
-   const bullet = bullets.create(100, 100, "bulletSprites");
+    
+   let bullet = bullets.create(0, 0, "bulletSprites");
+   bullet.type = 'bullet'
    // Set bullet collision with world bounds
    bullet.setCollideWorldBounds(true);
+   bullet.tank = tank;
    // Destroy the bullet when it collides with world bounds
    bullet.body.onWorldBounds = true;
    this.physics.world.on('worldbounds', (body) => {
