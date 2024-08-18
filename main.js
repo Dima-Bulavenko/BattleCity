@@ -197,8 +197,15 @@ function setBulletCollision() {
   this.physics.add.collider(bullets, armorWallLayer, bulletHitsWall, null, this);
   this.physics.add.collider(bullets, eagleLayer, bulletHitsEagle, null, this);
     //   // Add collision detection between bullets and tanks
-      this.physics.add.collider(player, bullets,  bulletHitsTank, null, this);
-      this.physics.add.collider(bullets, enemies, bulletHitsTank, null, this);
+      this.physics.add.collider(bullets, player, bulletHitsPlayer, null, this);
+      this.physics.add.collider(bullets, enemies, bulletHitsEnemy, null, this);
+}
+
+function bulletHitsPlayer(tank, bullet) {
+    bulletHitsTank(bullet, tank);
+}
+function bulletHitsEnemy(bullet, tank) {
+    bulletHitsTank(bullet, tank);
 }
 
 function bulletHitsTank(bullet, tank) {
@@ -212,11 +219,11 @@ function bulletHitsTank(bullet, tank) {
         destroyTank(tank);
     }
     bullet.destroy();
-    tank.destroy();
 }
 
 function destroyTank(tank) {
     tank.destroy();
+    tank.isDestroyed = true;
 }
 
 // Function to ensure bullet is destroyed after collision
@@ -282,6 +289,7 @@ function createTank(x, y, type) {
 
     if (tank) {
       tank.type = type;
+      tank.isDestroyed = false;
       setTankCollision.call(this, tank);
       setTankAnimation.call(this, `${tank.type}Sprites`, tank);
     }
@@ -320,6 +328,7 @@ function createEnemyTank(x, y, type) {
   // Create an enemy sprite and set its initial position
   const enemy = enemies.create(x, y, `${type}Sprites`);
   changeEnemyDirectionRandomly.call(this, enemy)
+  shootRandomly.call(this, enemy)
   enemy.health = 1;
   return enemy;
 }
@@ -462,6 +471,9 @@ function getRandomDelay(min, max) {
 
 // Function to change enemy direction and reset the timer with a new random delay
 function changeEnemyDirectionRandomly(enemy) {
+    if (enemy.isDestroyed) {
+        return;
+    }
     changeEnemyDirection(enemy); // Change the enemy's direction
     // Reset the timer with a new random delay
     const minDelay = 1000;
@@ -480,4 +492,21 @@ function changeEnemyDirection(enemy) {
     const directions = ['up', 'down', 'left', 'right'];
     const newDirection = Phaser.Math.RND.pick(directions);
     enemy.direction = newDirection;
+}
+
+function shootRandomly(tank) {
+    if (tank.isDestroyed) {
+        return;
+    }
+    const minDelay = 1000;
+    const maxDelay = 1500;
+    fireBullet.call(this, tank);
+    const delay = getRandomDelay(minDelay, maxDelay);
+    this.time.addEvent({
+        delay: delay,
+        callback:  shootRandomly,
+        callbackScope: this,
+        loop: false,
+        args: [tank]
+    });
 }
