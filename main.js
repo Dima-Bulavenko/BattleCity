@@ -196,14 +196,14 @@ function setBulletCollision() {
   this.physics.add.collider(bullets, eagleLayer, bulletHitsEagle, null, this);
     //   // Add collision detection between bullets and tanks
     //   this.physics.add.collider(bullets, player, bulletHitsTank, null, this);
-    //   this.physics.add.collider(bullets, enemies, bulletHitsTank, null, this);
+      this.physics.add.collider(bullets, enemies, bulletHitsTank, null, this);
 }
 
 
 function bulletHitsTank(bullet, tank) {
     if (bullet) {
         console.log("Bullet exists, destroying bullet:", bullet);
-        // bullet.destroy(); // If this line is uncommented error comes up
+        bullet.destroy(); // If this line is uncommented error comes up
     } else {
         console.error("Bullet is undefined");
     }
