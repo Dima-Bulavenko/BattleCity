@@ -1,3 +1,21 @@
+let currentScore = 0;
+
+//  Logic to increase the score when an enemy is destroyed.
+function initializeScore() {
+    currentScore = 0;
+    updateScoreDisplay();
+}
+
+function updateScoreDisplay() {
+    document.getElementById('score').textContent = `Score: ${currentScore}`;
+}
+
+function increaseScore(amount) {
+    currentScore += amount;
+    updateScoreDisplay();
+}
+
+
 // Function to get high scores from localStorage
 function getHighScores() {
     let highScores = JSON.parse(localStorage.getItem('highScores')) || [];
@@ -73,3 +91,31 @@ window.addEventListener('keydown', function(event) {
         closeModal('highScoresModal');
     }
 });
+
+
+// Health bar example (if used in the game)
+let health = 100;
+
+function updateHealthBar(newHealth) {
+    health = newHealth;
+    const healthBar = document.getElementById('health-bar');
+    healthBar.style.width = health + '%';
+
+    if (health > 50) {
+        healthBar.style.backgroundColor = '#4caf50';
+    } else if (health > 20) {
+        healthBar.style.backgroundColor = '#ff9800';
+    } else {
+        healthBar.style.backgroundColor = '#f44336';
+    }
+}
+
+updateHealthBar(80); // Example to reduce health by 20% as a demonstration
+
+// Game Over screen display function
+function showGameOver() {
+    const gameOverScreen = document.getElementById('game-over');
+    gameOverScreen.style.display = 'block';
+}
+
+

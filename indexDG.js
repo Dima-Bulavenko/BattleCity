@@ -1,6 +1,4 @@
 // Retro audio
-const buttonClickSound = new Audio('assets/sounds/click.wav');
-const buttonHoverSound = new Audio('assets/sounds/hover.wav');
 const menuMusic = new Audio('assets/sounds/248117__zagi2__retro-gaming-loop.ogg');
 
 // Start playing the menu music automatically when the page loads
@@ -26,36 +24,14 @@ function startGame() {
 }
 
 document.getElementById('start-button').addEventListener('click', () => {
-    buttonClickSound.play();
     startGame();
 });
-
-document.getElementById('start-button').addEventListener('mouseover', () => {
-    buttonHoverSound.play();
-});
-
-// Health bar example (if used in the game)
-let health = 100;
-
-function updateHealthBar(newHealth) {
-    health = newHealth;
-    const healthBar = document.getElementById('health-bar');
-    healthBar.style.width = health + '%';
-
-    if (health > 50) {
-        healthBar.style.backgroundColor = '#4caf50';
-    } else if (health > 20) {
-        healthBar.style.backgroundColor = '#ff9800';
-    } else {
-        healthBar.style.backgroundColor = '#f44336';
-    }
-}
-
-updateHealthBar(80); // Example to reduce health by 20% as a demonstration
 
 // Game Over screen display function
 function showGameOver() {
     const gameOverScreen = document.getElementById('game-over');
     gameOverScreen.style.display = 'block';
 }
+
+
 

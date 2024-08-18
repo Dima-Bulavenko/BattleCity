@@ -54,6 +54,7 @@ var fireKey;
 var enemies; 
 // Layers
 var toplayer, wallLayer, armorWallLayer, eagleLayer
+let score = 0; // Initialize score variable
 // Music
 let music;
 let speakerButtonElement = document.getElementById('speaker-button');
@@ -248,6 +249,10 @@ function bulletHitsTank(bullet, tank) {
 function destroyTank(tank) {
     tank.destroy();
     tank.isDestroyed = true;
+
+    if (tank.type === 'enemy') {
+        increaseScore(100); // Add this line to increase score by 100
+    }
 }
 
 // Function to ensure bullet is destroyed after collision
