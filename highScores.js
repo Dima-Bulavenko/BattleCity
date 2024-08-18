@@ -37,16 +37,39 @@ function closeModal(modalId) {
     document.getElementById(modalId).style.display = 'none'; // Hide the modal
 }
 
-// Example usage
+// Example usage for the high scores modal
 document.getElementById('high-scores-button').addEventListener('click', openHighScoresModal);
 
-// After the game ends and you have the player's score
-//function endGame(playerScore) {
- //   let playerName = "Player1"; // Replace this with the desired player name or set dynamically
- //   addHighScore(playerScore, playerName);
- //   openHighScoresModal(); // Automatically show the high scores modal after the game ends
-//}
+// Ensure that this line is commented out until you actually define the `endGame` function
+// let finalScore = 1200; // Replace with the actual final score when the game ends
+// endGame(finalScore);
 
-// Example usage: Trigger endGame with a score when the game ends
-let finalScore = 1200; // Replace with the actual final score when the game ends
-endGame(finalScore);
+// Instructions Modal Logic
+const instructionsModal = document.getElementById("instructions-modal");
+const instructionsBtn = document.getElementById("instructions-button");
+const instructionsClose = instructionsModal.getElementsByClassName("close")[0];
+
+// When the user clicks the Instructions button, open the modal
+instructionsBtn.onclick = function() {
+    instructionsModal.style.display = "block";
+}
+
+// When the user clicks on <span> (x), close the modal
+instructionsClose.onclick = function() {
+    instructionsModal.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+    if (event.target == instructionsModal) {
+        instructionsModal.style.display = "none";
+    }
+}
+
+// Close modal if escape key is pressed
+window.addEventListener('keydown', function(event) {
+    if (event.key === "Escape") {
+        instructionsModal.style.display = "none";
+        closeModal('highScoresModal');
+    }
+});

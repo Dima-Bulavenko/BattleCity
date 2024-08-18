@@ -59,21 +59,3 @@ function showGameOver() {
     gameOverScreen.style.display = 'block';
 }
 
-// Instructions Modal Logic
-const modal = document.getElementById("instructions-modal");
-const btn = document.getElementById("instructions-button");
-const span = document.getElementsByClassName("close")[0];
-
-btn.onclick = function() {
-    modal.style.display = "block";
-}
-
-span.onclick = function() {
-    modal.style.display = "none";
-}
-
-window.onclick = function(event) {
-    if (event.target == modal) {
-        modal.style.display = "none";
-    }
-}
