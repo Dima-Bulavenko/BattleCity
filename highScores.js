@@ -1,3 +1,108 @@
+let currentScore = 0;
+let playerLives = 3; // Player starts with 3 lives
+let health = 100; // Player starts with 100% health
+
+//  Logic to increase the score when an enemy is destroyed.
+function initializeScore() {
+    currentScore = 0;
+    updateScoreDisplay();
+}
+
+function updateScoreDisplay() {
+    document.getElementById('score').textContent = `Score: ${currentScore}`;
+}
+
+function increaseScore(amount) {
+    currentScore += amount;
+    updateScoreDisplay();
+}
+
+
+// Function to update the lives display on the HUD
+function updateLivesDisplay() {
+    const livesElement = document.getElementById('lives');
+    livesElement.textContent = `Lives: ${playerLives}`;
+}
+
+// Function to handle when the player is hit
+function playerHit() {
+    playerLives -= 1; // Decrease player lives by 1
+
+    updateHealthBar(); // Update the health bar after losing a life
+    // Update the lives display
+    updateLivesDisplay();
+
+    // Check if the player has no lives left
+    if (playerLives <= 0) {
+        endGame(); // Trigger the end game sequence
+    } 
+}
+
+function endGame() {
+    // Save the final score using the player's name and currentScore
+    addHighScore(currentScore, "Player"); // Replace "Player" with the actual player name if needed
+
+    // Trigger game over display
+    showGameOver();
+
+
+    // Display the final score in the game over screen
+    document.getElementById('final-score').textContent = `Final Score: ${currentScore}`;
+
+    // Set a timeout to reload the browser after 3 seconds (3000 milliseconds)
+    setTimeout(() => {
+        window.location.reload();
+    }, 4000);
+}
+
+function resetGame() {
+    // Resetting player stats
+    playerLives = 3;
+    currentScore = 0;
+    updateLivesDisplay();
+    updateScoreDisplay();
+    updateHealthBar(100); // Reset the health bar to full
+
+    // Reset player position or other relevant game objects
+    player.setPosition(304, 204); // Set the player's initial position
+
+    // Optionally reset or clear enemies and other game elements
+    enemies.clear(true, true); // Remove all existing enemies
+}
+
+function returnToMainMenu() {
+    // Hide the game container and show the main menu
+    document.getElementById('game-container').style.display = 'none';
+    document.getElementById('main-menu').style.display = 'block';
+
+    // Optionally restart or reset other game elements as needed
+}
+
+
+// Health bar update function
+function updateHealthBar() {
+    const healthBar = document.getElementById('health-bar');
+    
+    // Calculate the new width based on the remaining lives
+    const newWidth = (playerLives / 3) * 100;
+    healthBar.style.width = `${newWidth}%`;
+
+    // Change color based on health percentage
+    if (newWidth > 66) {
+        healthBar.style.backgroundColor = '#4caf50'; // Green for high health
+    } else if (newWidth > 33) {
+        healthBar.style.backgroundColor = '#ff9800'; // Orange for medium health
+    } else {
+        healthBar.style.backgroundColor = '#f44336'; // Red for low health
+    }
+}
+
+// Game Over screen display function
+function showGameOver() {
+    const gameOverScreen = document.getElementById('game-over');
+    gameOverScreen.style.display = 'block';
+}
+
 // Function to get high scores from localStorage
 function getHighScores() {
     let highScores = JSON.parse(localStorage.getItem('highScores')) || [];
@@ -37,16 +142,46 @@ function closeModal(modalId) {
     document.getElementById(modalId).style.display = 'none'; // Hide the modal
 }
 
-// Example usage
+// Example usage for the high scores modal
 document.getElementById('high-scores-button').addEventListener('click', openHighScoresModal);
 
-// After the game ends and you have the player's score
-//function endGame(playerScore) {
- //   let playerName = "Player1"; // Replace this with the desired player name or set dynamically
- //   addHighScore(playerScore, playerName);
- //   openHighScoresModal(); // Automatically show the high scores modal after the game ends
-//}
+// Ensure that this line is commented out until you actually define the `endGame` function
+ //let finalScore = 1200; // Replace with the actual final score when the game ends
+//endGame(finalScore);
 
-// Example usage: Trigger endGame with a score when the game ends
-let finalScore = 1200; // Replace with the actual final score when the game ends
-endGame(finalScore);
+// Instructions Modal Logic
+const instructionsModal = document.getElementById("instructions-modal");
+const instructionsBtn = document.getElementById("instructions-button");
+const instructionsClose = instructionsModal.getElementsByClassName("close")[0];
+
+// When the user clicks the Instructions button, open the modal
+instructionsBtn.onclick = function() {
+    instructionsModal.style.display = "block";
+}
+
+// When the user clicks on <span> (x), close the modal
+instructionsClose.onclick = function() {
+    instructionsModal.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+    if (event.target == instructionsModal) {
+        instructionsModal.style.display = "none";
+    }
+}
+
+// Close modal if escape key is pressed
+window.addEventListener('keydown', function(event) {
+    if (event.key === "Escape") {
+        instructionsModal.style.display = "none";
+        closeModal('highScoresModal');
+    }
+});
+
+
+
+
+
+
+

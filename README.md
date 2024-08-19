@@ -103,6 +103,7 @@ Please see [TESTING.md](TESTING.md) for a comprehensive list of tests performed.
 - [Phaser](https://phaser.io/) - To create game.
 - [Tiled](https://www.mapeditor.org/) - Map editor used.
 - [VS Code](https://code.visualstudio.com/) - IDE used.
+- [Sweetalert2](https://sweetalert2.github.io/#download) - Create alerts for the exit game
 
 
 ---

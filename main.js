@@ -1,17 +1,19 @@
 // Basic game parameters
+const scale = 3;
 const canvasWidth = 800;
-const canvasHeight = 600;
-const mapWidth = 208;
-const mapHeight = 208;
+const canvasHeight = 800;
+const mapWidth = 208 * scale;
+const mapHeight = 208 * scale;
 const mapX = canvasWidth / 2 - mapWidth / 2;
 const mapY = canvasHeight / 2 - mapHeight / 2;
-const tileSize = 16;
+const tileSize = 16 * scale;
 
 const config = {
     type: Phaser.AUTO,
     width: canvasWidth,
     height: canvasHeight,
     parent: 'phaser-game',
+    backgroundColor: '#2e2d2d', 
     scene: {
         preload: preload,
         create: create,
@@ -28,15 +30,23 @@ const config = {
     autoStart: false // Prevent scene from starting automatically
 };
 
-// Create the Phaser game instance
-const game = new Phaser.Game(config);
+// Variable for starting the game
+let game;
 
-// Add the scene but don't start it
-game.scene.add('default', {
-    preload: preload,
-    create: create,
-    update: update
-}, false);
+// Function to initialize and start the game
+function startGame() {
+    // Hide the main menu
+    document.getElementById('main-menu').style.display = 'none';
+    
+    // Show the game container
+    document.getElementById('game-container').style.display = 'block';
+
+    // Create the Phaser game instance only when the start button is clicked
+    game = new Phaser.Game(config);
+}
+
+// Event listener for the "Start" button
+document.getElementById('start-button').addEventListener('click', startGame);
 
 
 // Declare variables globally
@@ -47,6 +57,7 @@ var fireKey;
 var enemies; 
 // Layers
 var toplayer, wallLayer, armorWallLayer, eagleLayer
+let score = 0; // Initialize score variable
 // Music
 let music;
 let speakerButtonElement = document.getElementById('speaker-button');
@@ -106,10 +117,10 @@ function create() {
     const tileset = map.addTilesetImage("map1", "battleCityField");
 
     // Create level layers
-    toplayer = map.createLayer("toplayer", tileset, mapX, mapY);
-    wallLayer = map.createLayer("wall", tileset, mapX, mapY);
-    armorWallLayer = map.createLayer("armor_wall", tileset, mapX, mapY)
-    eagleLayer = map.createLayer("eagle", tileset, mapX, mapY)
+    toplayer = map.createLayer("toplayer", tileset, mapX, mapY).setScale(scale);
+    wallLayer = map.createLayer("wall", tileset, mapX, mapY).setScale(scale);
+    armorWallLayer = map.createLayer("armor_wall", tileset, mapX, mapY).setScale(scale)
+    eagleLayer = map.createLayer("eagle", tileset, mapX, mapY).setScale(scale)
 
     // Set collision on the wall tiles. 
     // Assuming that tiles with IDs 1 and above are walls.
@@ -134,11 +145,9 @@ function create() {
     // Add event listeners for keyboard input
     const escKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
     const enterKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ENTER);
-    const shiftKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SHIFT);
 
     escKey.on('down', handlePause.bind(this));
     enterKey.on('down', handleExitConfirmation.bind(this));
-    shiftKey.on('down', handleResume.bind(this));
     this.physics.add.collider(player, enemies, handleCollision, null, this);
     this.physics.add.collider(enemies, enemies, handleCollision, null, this);
     // Set up a timer to spawn enemy tanks every 7 seconds
@@ -197,8 +206,8 @@ function fireBullet(tank) {
     const bullet = createBullet.call(this, tank);
     if (bullet) {
         tank.activeBullet = bullet;
-        const bulletShift = (tileSize / 2 + bullet.width);
-        const bulletVelocity = 200;
+        const bulletShift = (tileSize / 2 + bullet.body.width);
+        const bulletVelocity = 200 * scale;
         switch (tank.direction) {
             case "up":
                 bullet.setVelocityY(-bulletVelocity);
@@ -229,9 +238,10 @@ function setBulletCollision() {
   this.physics.add.collider(bullets, wallLayer, bulletHitsWall, null, this);
   this.physics.add.collider(bullets, armorWallLayer, bulletHitsWall, null, this);
   this.physics.add.collider(bullets, eagleLayer, bulletHitsEagle, null, this);
-    //   // Add collision detection between bullets and tanks
-      this.physics.add.collider(bullets, player, bulletHitsPlayer, null, this);
-      this.physics.add.collider(bullets, enemies, bulletHitsEnemy, null, this);
+   
+  // Add collision detection between bullets and tanks
+    this.physics.add.collider(bullets, player, bulletHitsPlayer, null, this);
+    this.physics.add.collider(bullets, enemies, bulletHitsEnemy, null, this);
 }
 
 function bulletHitsPlayer(tank, bullet) {
@@ -264,11 +274,19 @@ function bulletHitsTank(bullet, tank) {
         destroyTank(tank);
     }
     bullet.destroy();
+
+    if (tank.type === 'player') {
+        playerHit(); // Call playerHit() when the player is hit
+    }
 }
 
 function destroyTank(tank) {
     tank.destroy();
     tank.isDestroyed = true;
+
+    if (tank.type === 'enemy') {
+        increaseScore(100); // Add this line to increase score by 100
+    }
 }
 
 // Function to ensure bullet is destroyed after collision
@@ -286,7 +304,7 @@ function roundTo(value, step) {
 }
 
 function moveTank(direction, tank) {
-    let velocity = 70;
+    let velocity = 70 * scale;
     let prefix = tank.type;
 
     // Check for potential collision in the direction of movement
@@ -367,6 +385,7 @@ function createPlayerTank(x, y, type='player') {
     if (player) return player;
 
     player = this.physics.add.sprite(x, y, `${type}Sprites`);
+    player.setScale(scale);
     player.health = 3;
     return player;
 }
@@ -386,6 +405,7 @@ function createEnemyTank(x, y, type) {
   }
   // Create an enemy sprite and set its initial position
   const enemy = enemies.create(x, y, `${type}Sprites`);
+  enemy.setScale(scale);
   changeEnemyDirectionRandomly.call(this, enemy)
   shootRandomly.call(this, enemy)
   enemy.health = 1;
@@ -399,6 +419,8 @@ function createBullet(tank) {
     }
     
    let bullet = bullets.create(0, 0, "bulletSprites");
+    bullet.body.setSize(1, 1);
+    bullet.setScale(scale);
    bullet.type = 'bullet'
    // Set bullet collision with world bounds
    bullet.setCollideWorldBounds(true);
@@ -664,7 +686,7 @@ function handlePause() {
         if (typeof Swal !== 'undefined') {
             Swal.fire({
                 title: 'Game Paused',
-                text: "Press Enter to confirm exit or Shift to resume.",
+                text: "Press Enter to confirm exit or ESC to resume.",
                 icon: 'info',
                 showCancelButton: false,
                 confirmButtonText: 'Confirm Exit',
