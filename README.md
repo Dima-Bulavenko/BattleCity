@@ -41,12 +41,17 @@ As the game owner I want to:
 - GiHub projects was used to manage the team working sprints at each stage of development.
 - Find the link to the kanban board [here](https://github.com/users/Dima-Bulavenko/projects/7/views/1).
 
+
+---
+
+
 ## Features
 
-| Features | Existing Features | Future Implementations | Screenshots |
-| --- | --- | --- | --- |
-
 ### Gameplay
+
+The player controls a tank that can move in four directions—up, down, left, and right—and fire bullets to destroy enemy tanks and obstacles. The battlefield is a mix of destructible and indestructible obstacles, such as brick walls, which can be destroyed by shooting, and steel walls, which are indestructible. These obstacles serve as both cover and potential hazards; while they can be used to hide from enemy tanks, destroying them could leave the player vulnerable to attacks.
+The player starts with 3 lives, losing one each time their tank is hit by an enemy. As the player successfully destroys enemy tanks, more enemy tanks appear, escalating the challenge. The game requires not only precise shooting but also strategic use of the environment to survive.
+To win, the player must eliminate all enemy tanks while keeping their remaining lives intact. Victory is achieved when all waves of enemy tanks are destroyed. If the player loses all lives, the game ends, forcing them to start over and refine their strategy for another attempt.
 
 ---
 
@@ -68,15 +73,9 @@ The following colours were generated from the [Battle City Spritsheet](assets/ba
 The [Press Start 2P](https://fonts.google.com/specimen/Press+Start+2P?preview.text=Welcome%20to%20Battle%20City&query=Press+Start+2P) font adds to the pixelated theme of the game. It adds some fun, and evokes a feeling of nostalgia. It is illustrative, yet has a structural integrity and readability to it. The user can get a clear sense of the design from this font.
 
 
-### Imagery
-
-
-### Favicon
-
-
 ### Flowchart
 
-- ![Game Layout](/docs/battle_city_game_layout_visual.png)
+![Game Layout](/docs/battle_city_game_layout_visual.png)
 
 ---
 
@@ -98,6 +97,7 @@ Please see [TESTING.md](TESTING.md) for a comprehensive list of tests performed.
 
 ### Frameworks, Libraries & Programs
 
+- [Chat GPT](https://chat.openai.com/) - for general consultation when troubleshooting.
 - [Google Chrome Developer Tools](https://developer.chrome.com/docs/devtools/overview/) - For testing.
 - [GitHub](https://github.com/) - To store associated files & developments of the website.
 - [Gitpod](https://www.gitpod.io/) - IDE used.
@@ -169,6 +169,8 @@ The live link can be found [here](https://dima-bulavenko.github.io/BattleCity/).
 ---
 
 ## Credits
+
+This game was inspired by the original Battle City by Namco (now Bandai Namco) in 1985 for the Nintendo Entertainment System (NES) and other platforms.
 
 ### Media
 
