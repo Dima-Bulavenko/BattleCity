@@ -1,17 +1,19 @@
 // Basic game parameters
+const scale = 3;
 const canvasWidth = 800;
-const canvasHeight = 600;
-const mapWidth = 208;
-const mapHeight = 208;
+const canvasHeight = 800;
+const mapWidth = 208 * scale;
+const mapHeight = 208 * scale;
 const mapX = canvasWidth / 2 - mapWidth / 2;
 const mapY = canvasHeight / 2 - mapHeight / 2;
-const tileSize = 16;
+const tileSize = 16 * scale;
 
 const config = {
     type: Phaser.AUTO,
     width: canvasWidth,
     height: canvasHeight,
     parent: 'phaser-game',
+    backgroundColor: '#2e2d2d', 
     scene: {
         preload: preload,
         create: create,
@@ -101,10 +103,10 @@ function create() {
     const tileset = map.addTilesetImage("map1", "battleCityField");
 
     // Create level layers
-    toplayer = map.createLayer("toplayer", tileset, mapX, mapY);
-    wallLayer = map.createLayer("wall", tileset, mapX, mapY);
-    armorWallLayer = map.createLayer("armor_wall", tileset, mapX, mapY)
-    eagleLayer = map.createLayer("eagle", tileset, mapX, mapY)
+    toplayer = map.createLayer("toplayer", tileset, mapX, mapY).setScale(scale);
+    wallLayer = map.createLayer("wall", tileset, mapX, mapY).setScale(scale);
+    armorWallLayer = map.createLayer("armor_wall", tileset, mapX, mapY).setScale(scale)
+    eagleLayer = map.createLayer("eagle", tileset, mapX, mapY).setScale(scale)
 
     // Set collision on the wall tiles. 
     // Assuming that tiles with IDs 1 and above are walls.
@@ -192,7 +194,7 @@ function fireBullet(tank) {
     const bullet = createBullet.call(this, tank);
     if (bullet) {
         tank.activeBullet = bullet;
-        const bulletShift = (tileSize / 2 + bullet.width);
+        const bulletShift = (tileSize / 2 + bullet.body.width);
         const bulletVelocity = 200;
         switch (tank.direction) {
             case "up":
@@ -350,6 +352,7 @@ function createPlayerTank(x, y, type='player') {
     if (player) return player;
 
     player = this.physics.add.sprite(x, y, `${type}Sprites`);
+    player.setScale(scale);
     player.health = 3;
     return player;
 }
@@ -369,6 +372,7 @@ function createEnemyTank(x, y, type) {
   }
   // Create an enemy sprite and set its initial position
   const enemy = enemies.create(x, y, `${type}Sprites`);
+  enemy.setScale(scale);
   changeEnemyDirectionRandomly.call(this, enemy)
   shootRandomly.call(this, enemy)
   enemy.health = 1;
@@ -382,6 +386,8 @@ function createBullet(tank) {
     }
     
    let bullet = bullets.create(0, 0, "bulletSprites");
+    bullet.body.setSize(1, 1);
+    bullet.setScale(scale);
    bullet.type = 'bullet'
    // Set bullet collision with world bounds
    bullet.setCollideWorldBounds(true);
