@@ -136,6 +136,13 @@ function create() {
     shiftKey.on('down', handleResume.bind(this));
     this.physics.add.collider(player, enemies, handleCollision, null, this);
     this.physics.add.collider(enemies, enemies, handleCollision, null, this);
+    // Set up a timer to spawn enemy tanks every 7 seconds
+    this.time.addEvent({
+        delay: 7000, // (7 seconds)
+        callback: generateEnemy,
+        callbackScope: this,
+        loop: true
+    });
 }
 
 // Toggle the music on and off
@@ -684,3 +691,11 @@ function exitFullGame() {
     });
 }
 
+function generateEnemy() {
+    if (enemies.children.size >= 7) {
+        return;
+    }
+    positions = [[304, 204], [400, 204], [496, 292]]
+    const [x, y] = Phaser.Math.RND.pick(positions);
+    createTank.call(this, x, y, 'enemy');
+}
