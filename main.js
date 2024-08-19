@@ -27,7 +27,11 @@ const config = {
             debug: false // Set to true if you want to see the collision boxes
         }
     },
-    autoStart: false // Prevent scene from starting automatically
+    autoStart: false, // Prevent scene from starting automatically
+    scale: {
+        mode: Phaser.Scale.FIT, // Fit the game into the container while maintaining aspect ratio
+        autoCenter: Phaser.Scale.CENTER_BOTH // Center the game in both dimensions
+    }
 };
 
 // Variable for starting the game
