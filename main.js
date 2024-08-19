@@ -137,7 +137,9 @@ function create() {
   
   // Create player tank
   createTank.call(this, 304, 204, 'player');
-  createTank.call(this, 304 + tileSize, 204, 'enemy');
+  createTank.call(this, 400 + tileSize, 330, 'enemy');
+  createTank.call(this, 250 + tileSize, 360, 'enemy');
+  createTank.call(this, 340 + tileSize, 250, 'enemy');
 
   // Enable cursor keys for player movement
   cursors = this.input.keyboard.createCursorKeys();
@@ -156,7 +158,7 @@ function create() {
     this.physics.add.collider(enemies, enemies, handleCollision, null, this);
     // Set up a timer to spawn enemy tanks every 7 seconds
     this.time.addEvent({
-        delay: 7000, // (7 seconds)
+        delay: 3000, // (7 seconds)
         callback: generateEnemy,
         callbackScope: this,
         loop: true
@@ -666,7 +668,7 @@ function shootRandomly(tank) {
     if (tank.isDestroyed) {
         return;
     }
-    const minDelay = 1000;
+    const minDelay = 500;
     const maxDelay = 1500;
     fireBullet.call(this, tank);
     const delay = getRandomDelay(minDelay, maxDelay);
@@ -749,7 +751,7 @@ function exitFullGame() {
 }
 
 function generateEnemy() {
-    if (enemies.children.size >= 7) {
+    if (enemies.children.size >= 12) {
         return;
     }
     positions = [[304, 204], [400, 204], [496, 292]]
