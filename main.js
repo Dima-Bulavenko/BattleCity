@@ -195,7 +195,7 @@ function fireBullet(tank) {
     if (bullet) {
         tank.activeBullet = bullet;
         const bulletShift = (tileSize / 2 + bullet.body.width);
-        const bulletVelocity = 200;
+        const bulletVelocity = 200 * scale;
         switch (tank.direction) {
             case "up":
                 bullet.setVelocityY(-bulletVelocity);
@@ -271,7 +271,7 @@ function roundTo(value, step) {
 }
 
 function moveTank(direction, tank) {
-    let velocity = 70;
+    let velocity = 70 * scale;
     let prefix = tank.type;
 
     // Check for potential collision in the direction of movement
