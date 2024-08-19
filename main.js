@@ -30,8 +30,24 @@ const config = {
     autoStart: false // Prevent scene from starting automatically
 };
 
-// Create the Phaser game instance
-const game = new Phaser.Game(config);
+// Variable for starting the game
+let game;
+
+// Function to initialize and start the game
+function startGame() {
+    // Hide the main menu
+    document.getElementById('main-menu').style.display = 'none';
+    
+    // Show the game container
+    document.getElementById('game-container').style.display = 'block';
+
+    // Create the Phaser game instance only when the start button is clicked
+    game = new Phaser.Game(config);
+}
+
+// Event listener for the "Start" button
+document.getElementById('start-button').addEventListener('click', startGame);
+
 
 // Add the scene but don't start it
 game.scene.add('default', {
@@ -49,6 +65,7 @@ var fireKey;
 var enemies; 
 // Layers
 var toplayer, wallLayer, armorWallLayer, eagleLayer
+let score = 0; // Initialize score variable
 // Music
 let music;
 let speakerButtonElement = document.getElementById('speaker-button');
@@ -249,11 +266,19 @@ function bulletHitsTank(bullet, tank) {
         destroyTank(tank);
     }
     bullet.destroy();
+
+    if (tank.type === 'player') {
+        playerHit(); // Call playerHit() when the player is hit
+    }
 }
 
 function destroyTank(tank) {
     tank.destroy();
     tank.isDestroyed = true;
+
+    if (tank.type === 'enemy') {
+        increaseScore(100); // Add this line to increase score by 100
+    }
 }
 
 // Function to ensure bullet is destroyed after collision

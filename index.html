@@ -7,22 +7,32 @@
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
+
+          <!-- Battle City Title -->
+    <div id="battle-city-title">Battle City</div> 
+
+
     <div id="game-container">
+
+         <!-- Speaker Button -->
+         <button id="speaker-button">
+            <img id="speaker-icon" src="assets/images/volume.png" alt="Speaker">
+        </button>
+
+         <!-- HUD (Heads-Up Display) -->
+    <div id="hud">
+        <div id="health-bar-container">
+            <div id="health-bar"></div>
+        </div>
+        <span id="score">Score: 0</span>
+        <span id="lives">Lives: 3</span>
+    </div>
 
         <!-- Game Canvas -->
          <div id="phaser-game"></div>
 
-        <!-- HUD (Heads-Up Display) -->
-        <div id="hud">
-            <div id="health-bar-container">
-                <div id="health-bar"></div>
-            </div>
-            <span id="score">Score: 0</span>
-            <span id="lives">Lives: 3</span>
-        </div>
-        
-
-        <!-- Main Menu -->
+    
+        <!-- Main menu -->
         <div id="main-menu">
             <h1>Battle City</h1>
             <button id="start-button">Start Game</button>
@@ -30,16 +40,17 @@
             <button id="high-scores-button">High Scores</button>
         </div>
 
-         <!-- Instructions modal -->
-        <div id="instructions-modal" class="modal">
+         <!-- Instructions Modal -->
+       <div id="instructions-modal" class="modal">
             <div class="modal-content">
                 <span class="close">&times;</span>
-                <h2>How to Play</h2>
+                <h2>Instructions</h2>
                 <p>Use arrow keys to move your tank.</p>
                 <p>Press space to shoot.</p>
                 <p>Destroy enemy tanks to score points!</p>
             </div>
         </div>
+
 
         <!-- Highscores modal -->
         <div id="highScoresModal" class="modal">
@@ -49,20 +60,17 @@
                 <div id="highscore-list"></div>
             </div>
         </div>
-        
 
-        <!-- Speaker Button -->
-        <button id="speaker-button">
-            <img id="speaker-icon" src="assets/images/volume.png" alt="Speaker On">
-        </button>
-         
-        
-        <div id="game-over">GAME OVER</div>
-    </div>
+    
+        <div id="game-over">
+            <h2>Game Over</h2>
+            <p id="final-score"></p> <!-- This will display the final score -->
+        </div>
+  </div>
     <script src="https://cdn.jsdelivr.net/npm/phaser@v3.80.1/dist/phaser.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="highScores.js"></script>
-    <script src="indexDG.js"></script>
+    
     <script src="main.js"></script>
 </body>
 </html>
