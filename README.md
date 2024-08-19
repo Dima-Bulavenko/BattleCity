@@ -2,7 +2,7 @@
 
 *Created by:* <strong>8-Bit Alchemists</strong>
 
-View the deployed game [here](https://dima-bulavenko.github.io/BattleCity/).
+View the deployed game [here](https://battlecity-5c42a227b130.herokuapp.com/).
 
 ---
 
@@ -111,6 +111,8 @@ Please see [TESTING.md](TESTING.md) for a comprehensive list of tests performed.
 
 ## Deployment
 
+### Deployment to Github
+
 The site was deployed early using Github Pages. The is how the live site was deployed:
 
   1. Log in (or sign up) to Github.
@@ -120,8 +122,27 @@ The site was deployed early using Github Pages. The is how the live site was dep
   5. In the Source section, choose main from the drop down select branch menu. Select Root from the drop down select folder menu.
   6. Click Save. Your live Github Pages site is now deployed at the URL shown.
 
+### Deployment to Heroku
 
-  ### Local Development
+  The site was deployed using Heroku. The is how the live site was deployed:
+
+  1. Log in (or sign up) to Heroku.
+  2. Go to the user dashboard & click "Create new app". Keep in mind that each app name on Heroku has to be unique.
+  3. Select the region & click "Create app".
+  4. Go to the settings tab & scroll to the "Config vars" section.
+  5. Click "Reveal Config Vars".
+  6. Create a Config Var, input the required hidden variables.
+  7. Scroll to the "Buildpacks" section.
+  8. Click "Add buildpacks". Select "Python" and "nodejs", and in that order.
+  9. Go to the “Deploy” tab.
+  10. Scroll to the “Deployment Method” section.
+  11. Click on “Connect to Github”. Search for the repository name & click "Connect".
+  12. Scroll to the "Manual Deploys" section.
+  13. Click "Deploy Branch". A message will show up to say "Your app was usccessfully deployed. The "View" button will take you to your deployed link.
+
+Find the live deployed site with Heroku [here](https://battlecity-5c42a227b130.herokuapp.com/).
+
+### Local Development
 
   #### How to Fork
 
