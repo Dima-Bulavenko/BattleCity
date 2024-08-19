@@ -41,7 +41,7 @@ function playerHit() {
 function playEndGameSound() {
     // Code to play the end game sound
     // For example, you can use the Audio API to play an audio file
-    const audio = new Audio('/assets/sounds/game_over.mp3');
+    const audio = new Audio('/assets/sounds/434465__dersuperanton__game-over-deep-epic.wav');
     audio.play();
 }
 
