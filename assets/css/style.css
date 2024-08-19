@@ -27,7 +27,6 @@ body {
     margin: 140px auto;
     border: 4px solid #00CC00;
     box-shadow: 0 0 20px #ffff00;
-    background: url('/assets/images/pixel-art-old-video-game-console-landscape-background-retro-style-8-bit-game-ai_985124-2227.avif'); /* Add a pixel grid background */
     background-size: cover;
     border-radius: 8px;
     display: flex;
@@ -53,13 +52,13 @@ body {
 
 /*Heads-up-display*/
 #hud {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    font-size: 14px;
-    display: flex;
-    align-items: center;
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; /* Center them vertically */
+    padding: 10px; /* Adjust padding as needed */
+    width: 100%;
 }
+
 
 #main-menu {
     position: absolute;
@@ -260,17 +259,17 @@ body {
 }
 
 #health-bar-container {
-    width: 200px;
+    width: 30%;
     height: 20px;
     background-color: #333;
     border: 2px solid #fff;
     padding: 2px;
-    margin-right: 100px;
-    margin-left: 10px
+    margin-right: 50px;
+    margin-left: 10px;
+    box-sizing: border-box; /* Ensure padding and border are included in the total width */
 }
 
 #health-bar {
-    width: 100%;
     height: 100%;
     background: repeating-linear-gradient(
         45deg,
@@ -279,13 +278,19 @@ body {
         #ff5a5a 10px,
         #ff5a5a 20px
     );
-    transition: width 0.3s ease; /* Smooth transition when health changes */
+    transition: width 0.3s ease, background-color 0.3s ease; /* Smooth transition when health and color change */
     image-rendering: pixelated; /* Force pixelated rendering */
+    box-sizing: border-box; /* Ensure any padding does not affect the width */
 }
 
-#score, #lives {
-    font-size: 16px;
-    margin-left: 10px;
+
+#lives {
+    font-size: 20px;
+    margin-right: 80px;
+}
+
+#score {
+    font-size: 20px;
 }
     
 #speaker-button {

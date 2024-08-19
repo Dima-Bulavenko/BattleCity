@@ -1,5 +1,6 @@
 let currentScore = 0;
 let playerLives = 3; // Player starts with 3 lives
+let health = 100; // Player starts with 100% health
 
 //  Logic to increase the score when an enemy is destroyed.
 function initializeScore() {
@@ -27,20 +28,40 @@ function updateLivesDisplay() {
 function playerHit() {
     playerLives -= 1; // Decrease player lives by 1
 
+    updateHealthBar(); // Update the health bar after losing a life
     // Update the lives display
     updateLivesDisplay();
 
     // Check if the player has no lives left
     if (playerLives <= 0) {
         showGameOver(); // Trigger game over
-    } else {
-        // Update the health bar accordingly
-        const healthPercentage = (playerLives / 3) * 100; // Assuming 3 lives means 100%
-        updateHealthBar(healthPercentage);
-    }
+    } 
 }
 
 
+// Health bar update function
+function updateHealthBar() {
+    const healthBar = document.getElementById('health-bar');
+    
+    // Calculate the new width based on the remaining lives
+    const newWidth = (playerLives / 3) * 100;
+    healthBar.style.width = `${newWidth}%`;
+
+    // Change color based on health percentage
+    if (newWidth > 66) {
+        healthBar.style.backgroundColor = '#4caf50'; // Green for high health
+    } else if (newWidth > 33) {
+        healthBar.style.backgroundColor = '#ff9800'; // Orange for medium health
+    } else {
+        healthBar.style.backgroundColor = '#f44336'; // Red for low health
+    }
+}
+
+// Game Over screen display function
+function showGameOver() {
+    const gameOverScreen = document.getElementById('game-over');
+    gameOverScreen.style.display = 'block';
+}
 
 // Function to get high scores from localStorage
 function getHighScores() {
@@ -119,29 +140,8 @@ window.addEventListener('keydown', function(event) {
 });
 
 
-// Health bar example (if used in the game)
-let health = 100;
 
-function updateHealthBar(newHealth) {
-    health = newHealth;
-    const healthBar = document.getElementById('health-bar');
-    healthBar.style.width = health + '%';
 
-    if (health > 50) {
-        healthBar.style.backgroundColor = '#4caf50';
-    } else if (health > 20) {
-        healthBar.style.backgroundColor = '#ff9800';
-    } else {
-        healthBar.style.backgroundColor = '#f44336';
-    }
-}
 
-updateHealthBar(80); // Example to reduce health by 20% as a demonstration
-
-// Game Over screen display function
-function showGameOver() {
-    const gameOverScreen = document.getElementById('game-over');
-    gameOverScreen.style.display = 'block';
-}
 
 
