@@ -1,4 +1,3 @@
-
 {
   "name": "battle_city",
   "version": "1.0.0",
@@ -14,7 +13,7 @@
   "dependencies": {
     "battle_city": "file:",
     "http-server": "^14.1.1",
-    "phaser": "^3.80.1"
+    "phaser": "^3.80.1",
+    "sweetalert2": "^11.12.4"
   }
 }
-
