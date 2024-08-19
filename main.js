@@ -1,3 +1,4 @@
+document.addEventListener('DOMContentLoaded', () => {
 // Basic game parameters
 const canvasWidth = 800;
 const canvasHeight = 600;
@@ -121,10 +122,19 @@ function create() {
 
   // Enable cursor keys for player movement
   cursors = this.input.keyboard.createCursorKeys();
-    fireKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+  fireKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
     // Enable cursor keys for player movement
     cursors = this.input.keyboard.createCursorKeys();
+
+    // Add event listeners for keyboard input
+    const escKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
+    const enterKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ENTER);
+    const shiftKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SHIFT);
+
+    escKey.on('down', handlePause.bind(this));
+    enterKey.on('down', handleExitConfirmation.bind(this));
+    shiftKey.on('down', handleResume.bind(this));
 }
 
 // Toggle the music on and off
@@ -140,28 +150,29 @@ function toggleMusic() {
 
 // Update the game state
 function update() {
-    if (cursors.left.isDown) {
-        moveTank('left', player);
-    } else if (cursors.right.isDown) {
-        moveTank('right', player);
-    } else if (cursors.up.isDown) {
-        moveTank('up', player);
-    } else if (cursors.down.isDown) {
-        moveTank('down', player);
-    } else {
-        player.setVelocity(0, 0); // Stop movement if no key is pressed
+    if (!this.gamePaused) {
+        if (cursors.left.isDown) {
+            moveTank('left', player);
+        } else if (cursors.right.isDown) {
+            moveTank('right', player);
+        } else if (cursors.up.isDown) {
+            moveTank('up', player);
+        } else if (cursors.down.isDown) {
+            moveTank('down', player);
+        } else {
+            player.setVelocity(0, 0);
+        }
+
+        if (Phaser.Input.Keyboard.JustDown(fireKey)) {
+            fireBullet.call(this, player);
+        }
+
+        if (enemies) {
+            enemies.children.iterate(function (enemy) {
+                moveTank(enemy.direction, enemy);
+            });
+        }
     }
-
-  // handle firing when spacebar is pressed
-  if (Phaser.Input.Keyboard.JustDown(fireKey)) {
-    fireBullet.call(this, player);
-  }
-
-  if (enemies) {
-    enemies.children.iterate(function (enemy) {
-      moveTank(enemy.direction, enemy)
-    });
-  }
 }
 
 function fireBullet(tank) {
@@ -550,3 +561,74 @@ function shootRandomly(tank) {
         args: [tank]
     });
 }
+});
+
+/**
+ * Handle game pause
+ */
+function handlePause() {
+    if (!this.gamePaused) {
+        this.gamePaused = true;
+        this.scene.pause('default'); // Pause the specific scene
+        
+        if (typeof Swal !== 'undefined') {
+            Swal.fire({
+                title: 'Game Paused',
+                text: "Press Enter to confirm exit or Shift to resume.",
+                icon: 'info',
+                showCancelButton: false,
+                confirmButtonText: 'Confirm Exit',
+                cancelButtonText: 'Resume',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    handleExitConfirmation.call(this);
+                } else {
+                    handleResume.call(this);
+                }
+            });
+        } else {
+            console.error('SweetAlert (Swal) is not defined. Ensure SweetAlert library is included.');
+        }
+    }
+}
+
+function handleResume() {
+    if (this.gamePaused) {
+        this.gamePaused = false;
+        this.scene.resume('default'); // Resume the specific scene
+    }
+}
+
+function handleExitConfirmation() {
+    if (this.gamePaused) {
+        Swal.fire({
+            title: 'Are you sure you want to exit?',
+            text: "Your progress will not be saved.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, exit!',
+            cancelButtonText: 'Cancel'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                exitFullGame.call(this);
+            } else {
+                handleResume.call(this);
+            }
+        });
+    }
+}
+
+function exitFullGame() {
+    this.game.destroy(true);
+    Swal.fire(
+        'Exited!',
+        'You have exited the game.',
+        'success'
+    ).then(() => {
+        window.location.href ="index.html"
+    });
+}
+
