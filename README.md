@@ -1,8 +1,8 @@
-# *Battle City*
+# Battle City
 
 *Created by:* <strong>8-Bit Alchemists</strong>
 
-[View the deployed game here](*ENTER DEPLOYED SITE URL*)
+View the deployed game [here](https://dima-bulavenko.github.io/BattleCity/).
 
 ---
 
@@ -12,12 +12,23 @@
 ### User Stories
 
 As a player I want to:
-- See my tank interacting in the game environment
-- Control my tanks movements using arrow keys
-- Rotate my tank when changing directions
-- Fire bullets so I can defeat my opponent
-- See my score displayed on the screen so I can track my progress
-- See my how many lives I have remaining
+- Read instructions on how to play the game.
+- See my tank interacting in the game environment.
+- Control my tanks movements using arrow keys.
+- Rotate my tank when changing directions.
+- Fire bullets so I can defeat my opponent.
+- See my score displayed on the screen so I can track my progress.
+- See my how many lives I have remaining.
+- Exit the gameplay (/to read instructions).
+- Mute the sounds in case I am in a public space.
+
+
+As the game owner I want to:
+- Create a game that is fun & nostalgic.
+- Provide a fully responsive game.
+- Create simple navigation.
+- Clear prompts using visuals & 8 bit sound effects.
+- Have a sound icon so users can mute & unmute sounds.
 
 ---
 
@@ -64,7 +75,7 @@ The [Press Start 2P](https://fonts.google.com/specimen/Press+Start+2P?preview.te
 
 ### Flowchart
 
-- ![Game Layout](*LINK DOCUMENT*)
+- ![Game Layout](/docs/battle_city_game_layout_visual.png)
 
 ---
 
@@ -86,32 +97,65 @@ Please see [TESTING.md](TESTING.md) for a comprehensive list of tests performed.
 
 ### Frameworks, Libraries & Programs
 
-- [Coolors](https://coolors.co/) - To create colour palettes.
-- [DevTools] - Testing & Troubleshooting
+- [Google Chrome Developer Tools](https://developer.chrome.com/docs/devtools/overview/) - For testing.
 - [GitHub](https://github.com/) - To store associated files & developments of the website.
 - [Gitpod](https://www.gitpod.io/) - IDE used.
-- [Google Fonts](https://fonts.google.com/) - To extract fonts for the website.
 - [Phaser](https://phaser.io/) - To create game.
 - [Tiled](https://www.mapeditor.org/) - Map editor used.
 - [VS Code](https://code.visualstudio.com/) - IDE used.
+- [Sweetalert2](https://sweetalert2.github.io/#download) - Create alerts for the exit game
 
 
 ---
 
 ## Deployment
 
+The site was deployed early using Github Pages. The is how the live site was deployed:
+
+  1. Log in (or sign up) to Github.
+  2. Find the repository for this project, [Dima-Bulavenko / BattleCity](https://github.com/Dima-Bulavenko/BattleCity).
+  3. Click on the Settings link.
+  4. Click on the Pages link in the left hand side navigation bar.
+  5. In the Source section, choose main from the drop down select branch menu. Select Root from the drop down select folder menu.
+  6. Click Save. Your live Github Pages site is now deployed at the URL shown.
 
 
-The live link can be found here - *INSERT LINK*
+  ### Local Development
+
+  #### How to Fork
+
+  To fork the Hobby repository:
+
+  1. Log in (or sign up) to Github.
+  2. Go to the repository for this project, [Dima-Bulavenko / BattleCity](https://github.com/Dima-Bulavenko/BattleCity).
+  3. Click the Fork button in the top right corner. This action will create a copy of the repository under your GitHub account.
+
+
+  #### How to Clone
+
+  To clone the Hobby repository:
+
+  1. Log in (or sign up) to GitHub.
+  2. Go to the repository for this project, [Dima-Bulavenko / BattleCity](https://github.com/Dima-Bulavenko/BattleCity).
+  3. Click on the code button, select whether you would like to clone with HTTPS, SSH or GitHub CLI and copy the link shown.
+  4. Open the terminal in your code editor and change the current working directory to the location you want to use for the cloned directory.
+  5. Type 'git clone' into the terminal and then paste the link you copied in step 3. Press enter.
+
+The live link can be found [here](https://dima-bulavenko.github.io/BattleCity/).
 
 
 ---
 
 ## Credits
 
-* [Freesound](https://freesound.org/) for sounds
-* [Favicon](https://favicon.io/) for favicon generation
-* [Flaticon](https://favicon.io/) for favicon image
+### Media
+
+* [Coolors](https://coolors.co/) to create colour palettes.
+* [Favicon](https://favicon.io/) for favicon generation.
+* [Flaticon](https://favicon.io/) for favicon image.
+* [Freesound](https://freesound.org/) for sounds.
+* [Google Fonts](https://fonts.google.com/) to extract fonts for the website.
+* [Pixabay](https://pixabay.com/sound-effects/search/retro%20games/) for retro background music.
 
 ### Code
 *REFERENCE ANY CODE COPIED FROM EXTERNAL SOURCES HERE*
@@ -119,7 +163,7 @@ The live link can be found here - *INSERT LINK*
 
 ### Collaborators
 
-[Berat Zorlu]()<br>
+[Berat Zorlu](https://github.com/beratzorlu)<br>
 [Dănuț Grigore](https://github.com/Danut89)<br>
 [Dima Bulavenko](https://github.com/Dima-Bulavenko)<br>
 [Hope Tracy Njoroge](https://github.com/Njorogetracy)<br>
@@ -127,3 +171,5 @@ The live link can be found here - *INSERT LINK*
 [Nonty Dazana](https://github.com/NontyD)
 
 ### Acknowledgemnets
+
+We would like to thank Code Institute for hosting Pixel Pioneers.

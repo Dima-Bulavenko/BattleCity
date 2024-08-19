@@ -97,6 +97,11 @@ function preload() {
 
     // Preload the music file
     this.load.audio('retroMusic', 'assets/sounds/248117__zagi2__retro-gaming-loop.ogg');
+    this.load.audio('playerHit', 'assets/sounds/player_hit.mp3');
+    this.load.audio('missedShot', 'assets/sounds/shot_missed.mp3')
+    this.load.audio('tankDefeat', 'assets/sounds/tank_explosion.mp3')
+    this.load.audio('tankCollide', 'assets/sounds/tanks_collide.mp3')
+    this.load.audio('gameOverSound', 'assets/sounds/game_over.mp3');
 }
 
 // Create game objects and add music
@@ -144,11 +149,9 @@ function create() {
     // Add event listeners for keyboard input
     const escKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
     const enterKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ENTER);
-    const shiftKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SHIFT);
 
     escKey.on('down', handlePause.bind(this));
     enterKey.on('down', handleExitConfirmation.bind(this));
-    shiftKey.on('down', handleResume.bind(this));
     this.physics.add.collider(player, enemies, handleCollision, null, this);
     this.physics.add.collider(enemies, enemies, handleCollision, null, this);
     // Set up a timer to spawn enemy tanks every 7 seconds
@@ -239,16 +242,29 @@ function setBulletCollision() {
   this.physics.add.collider(bullets, wallLayer, bulletHitsWall, null, this);
   this.physics.add.collider(bullets, armorWallLayer, bulletHitsWall, null, this);
   this.physics.add.collider(bullets, eagleLayer, bulletHitsEagle, null, this);
-    //   // Add collision detection between bullets and tanks
-      this.physics.add.collider(bullets, player, bulletHitsPlayer, null, this);
-      this.physics.add.collider(bullets, enemies, bulletHitsEnemy, null, this);
+   
+  // Add collision detection between bullets and tanks
+    this.physics.add.collider(bullets, player, bulletHitsPlayer, null, this);
+    this.physics.add.collider(bullets, enemies, bulletHitsEnemy, null, this);
 }
 
 function bulletHitsPlayer(tank, bullet) {
     bulletHitsTank(bullet, tank);
+    hitMusic = this.sound.add('playerHit');
+    hitMusic.play({
+        loop: false,
+        volume: 0.1
+    });
 }
+
 function bulletHitsEnemy(bullet, tank) {
     bulletHitsTank(bullet, tank);
+    tankDefeat = this.sound.add('tankDefeat');
+    tankDefeat.play({
+        audioPlayDelay: 0.1,
+        loop: false,
+        volume: 0.1
+    });
 }
 
 function bulletHitsTank(bullet, tank) {
@@ -602,6 +618,20 @@ function setTankAnimation(tankSprites, tank) {
   });
 }
 
+
+function onGameOver() {
+    // Stop retroMusic
+    if (gameOver) {
+        music.stop();
+    }
+
+    // Reassign music to gameOverSound
+    music = this.sound.add('gameOverSound');
+    music.play({
+        loop: true,
+        volume: 0.3
+    });
+}
 // Function to generate a random delay between min and max milliseconds
 function getRandomDelay(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -660,7 +690,7 @@ function handlePause() {
         if (typeof Swal !== 'undefined') {
             Swal.fire({
                 title: 'Game Paused',
-                text: "Press Enter to confirm exit or Shift to resume.",
+                text: "Press Enter to confirm exit or ESC to resume.",
                 icon: 'info',
                 showCancelButton: false,
                 confirmButtonText: 'Confirm Exit',
