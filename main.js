@@ -82,7 +82,11 @@ function preload() {
 
     // Preload the music file
     this.load.audio('retroMusic', 'assets/sounds/248117__zagi2__retro-gaming-loop.ogg');
-    this.load.audio('gameOverSound', 'assets/sounds/battle_city_8_bit_game_over');
+    this.load.audio('shootBullet', 'assets/sounds/shooting_bullet');
+    this.load.audio('missedShot', 'assets/sounds/shot_missed')
+    this.load.audio('tankDefeat', 'assets/sounds/tank_explosion')
+    this.load.audio('tankCollide', 'assets/sounds/tank_collide')
+    this.load.audio('gameOverSound', 'assets/sounds/game_over');
 }
 
 // Create game objects and add music
