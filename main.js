@@ -82,11 +82,11 @@ function preload() {
 
     // Preload the music file
     this.load.audio('retroMusic', 'assets/sounds/248117__zagi2__retro-gaming-loop.ogg');
-    this.load.audio('shootBullet', 'assets/sounds/shooting_bullet');
-    this.load.audio('missedShot', 'assets/sounds/shot_missed')
-    this.load.audio('tankDefeat', 'assets/sounds/tank_explosion')
-    this.load.audio('tankCollide', 'assets/sounds/tank_collide')
-    this.load.audio('gameOverSound', 'assets/sounds/game_over');
+    this.load.audio('shootBullet', 'assets/sounds/shoot_bullets.mp3');
+    this.load.audio('missedShot', 'assets/sounds/shot_missed.mp3')
+    this.load.audio('tankDefeat', 'assets/sounds/tank_explosion.mp3')
+    this.load.audio('tankCollide', 'assets/sounds/tank_collide.wmp3')
+    this.load.audio('gameOverSound', 'assets/sounds/game_over.mp3');
 }
 
 // Create game objects and add music
@@ -237,6 +237,7 @@ function setBulletCollision() {
 function bulletHitsPlayer(tank, bullet) {
     bulletHitsTank(bullet, tank);
 }
+
 function bulletHitsEnemy(bullet, tank) {
     bulletHitsTank(bullet, tank);
 }
