@@ -33,12 +33,13 @@ As the game owner I want to:
 ---
 
 ## Project Management
+
 ### Agile
-- An Agile approach has been applied in the creation and planning of this game
-- Github projects was used to manage the project's development cycles
-- GitHub projects was used to track user stories and implement them based on priority
+- An Agile approach has been applied in the creation and planning of this game.
+- Github projects was used to manage the project's development cycles.
+- GitHub projects was used to track user stories and implement them based on priority.
 - GiHub projects was used to manage the team working sprints at each stage of development.
-- Find the link to the kanban board [here](https://github.com/users/Dima-Bulavenko/projects/7/views/1)
+- Find the link to the kanban board [here](https://github.com/users/Dima-Bulavenko/projects/7/views/1).
 
 ## Features
 
@@ -155,10 +156,11 @@ The live link can be found [here](https://dima-bulavenko.github.io/BattleCity/).
 * [Flaticon](https://favicon.io/) for favicon image.
 * [Freesound](https://freesound.org/) for sounds.
 * [Google Fonts](https://fonts.google.com/) to extract fonts for the website.
+* [Online Audio Converter](https://online-audio-converter.com/) was used to change the audio file types.
 * [Pixabay](https://pixabay.com/sound-effects/search/retro%20games/) for retro background music.
 
 ### Code
-*REFERENCE ANY CODE COPIED FROM EXTERNAL SOURCES HERE*
+
 - [Sprite collision implementation](https://stackoverflow.com/questions/56729650/phaser3-detecting-sprite-collision)
 
 ### Collaborators
