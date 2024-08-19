@@ -116,6 +116,8 @@ function create() {
 
     // Enable cursor keys for player movement
     cursors = this.input.keyboard.createCursorKeys();
+    this.physics.add.collider(player, enemies, handleCollision, null, this);
+    this.physics.add.collider(enemies, enemies, handleCollision, null, this);
 }
 
 // Toggle the music on and off
@@ -233,6 +235,13 @@ function roundTo(value, step) {
 function moveTank(direction, tank) {
     let velocity = 70;
     let prefix = tank.type;
+
+    // Check for potential collision in the direction of movement
+    if (tank.collisionDirection === direction) {
+        tank.setVelocity(0, 0);
+        return;
+    }
+
     switch (direction) {
         case 'left':
             tank.y = roundTo(tank.y, 4);
@@ -396,19 +405,64 @@ function setTankCollision(tank){
   this.physics.add.collider(tank, wallLayer);
   this.physics.add.collider(tank, armorWallLayer);
   this.physics.add.collider(tank, eagleLayer);
-
-  if (tank.type==="player") {
-    this.physics.add.collider(tank, enemies, playerEnemyCollide, null, this);
-  }
-  
-  if (tank.type=== "enemy") {
-    tank.setImmovable(true);
-    this.physics.add.collider(tank, player, playerEnemyCollide, null, this)
-    this.physics.add.collider(tank, enemies);   
-    console.log("enemy moves tank")
-  }
 }
 
+function handleCollision(tank1, tank2) {
+    const direction = getCollisionDirection(tank1, tank2);
+    tank1.collisionDirection = direction;
+    tank2.collisionDirection = getOppositeDirection(direction); 
+
+    // Clear existing timeout if it exists
+    if (tank1.collisionTimeout) {
+        clearTimeout(tank1.collisionTimeout);
+    }
+    if (tank2.collisionTimeout) {
+        clearTimeout(tank2.collisionTimeout);
+    }
+
+    // Set a new timeout to reset the collision direction
+    tank1.collisionTimeout = setTimeout(() => {
+        tank1.collisionDirection = null;
+        tank1.collisionTimeout = null;
+    }, 300); // Adjust the delay as needed
+
+    tank2.collisionTimeout = setTimeout(() => {
+        tank2.collisionDirection = null;
+        tank2.collisionTimeout = null;
+    }, 300); // Adjust the delay as needed
+}
+
+// Get collision direction to the first tank
+function getCollisionDirection(tank1, tank2) {
+    const dx = tank1.x - tank2.x;
+    const dy = tank1.y - tank2.y;
+
+    if (Math.abs(dx) > Math.abs(dy)) {
+        // Horizontal collision
+        if (dx > 0) {
+            return 'left';
+        } else {
+            return 'right';
+        }
+    } else {
+        // Vertical collision
+        if (dy > 0) {
+            return 'up';
+        } else {
+            return 'down';
+        }
+    }
+}
+
+// Get collision direction for the second tank
+function getOppositeDirection(direction) {
+    switch (direction) {
+        case 'left': return 'right';
+        case 'right': return 'left';
+        case 'up': return 'down';
+        case 'down': return 'up';
+    }
+}
 /**
  * function that handles enemy and player tank collision
  * **/ 
