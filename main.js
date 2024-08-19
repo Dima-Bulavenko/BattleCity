@@ -246,10 +246,10 @@ function setBulletCollision() {
 
 function bulletHitsPlayer(tank, bullet) {
     bulletHitsTank(bullet, tank);
-    playerHit = this.sound.add('playerHit');
-    playerHit.play({
+    hitMusic = this.sound.add('playerHit');
+    hitMusic.play({
         loop: false,
-        volume: 0.5
+        volume: 0.1
     });
 }
 
