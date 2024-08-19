@@ -11,6 +11,7 @@ window.addEventListener('load', () => {
 });
 
 function startGame() {
+    // Hide the main menu and show the Phaser game canvas
     // Stop the menu music when the game starts
     if (menuMusic && !menuMusic.paused) {
         menuMusic.pause();
