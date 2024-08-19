@@ -34,8 +34,48 @@ function playerHit() {
 
     // Check if the player has no lives left
     if (playerLives <= 0) {
-        showGameOver(); // Trigger game over
+        endGame(); // Trigger the end game sequence
     } 
+}
+
+function endGame() {
+    // Save the final score using the player's name and currentScore
+    addHighScore(currentScore, "Player"); // Replace "Player" with the actual player name if needed
+
+    // Trigger game over display
+    showGameOver();
+
+
+    // Display the final score in the game over screen
+    document.getElementById('final-score').textContent = `Final Score: ${currentScore}`;
+
+    // Set a timeout to reload the browser after 3 seconds (3000 milliseconds)
+    setTimeout(() => {
+        window.location.reload();
+    }, 4000);
+}
+
+function resetGame() {
+    // Resetting player stats
+    playerLives = 3;
+    currentScore = 0;
+    updateLivesDisplay();
+    updateScoreDisplay();
+    updateHealthBar(100); // Reset the health bar to full
+
+    // Reset player position or other relevant game objects
+    player.setPosition(304, 204); // Set the player's initial position
+
+    // Optionally reset or clear enemies and other game elements
+    enemies.clear(true, true); // Remove all existing enemies
+}
+
+function returnToMainMenu() {
+    // Hide the game container and show the main menu
+    document.getElementById('game-container').style.display = 'none';
+    document.getElementById('main-menu').style.display = 'block';
+
+    // Optionally restart or reset other game elements as needed
 }
 
 
@@ -106,8 +146,8 @@ function closeModal(modalId) {
 document.getElementById('high-scores-button').addEventListener('click', openHighScoresModal);
 
 // Ensure that this line is commented out until you actually define the `endGame` function
-// let finalScore = 1200; // Replace with the actual final score when the game ends
-// endGame(finalScore);
+ //let finalScore = 1200; // Replace with the actual final score when the game ends
+//endGame(finalScore);
 
 // Instructions Modal Logic
 const instructionsModal = document.getElementById("instructions-modal");
