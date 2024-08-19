@@ -49,14 +49,6 @@ function startGame() {
 document.getElementById('start-button').addEventListener('click', startGame);
 
 
-// Add the scene but don't start it
-game.scene.add('default', {
-    preload: preload,
-    create: create,
-    update: update
-}, false);
-
-
 // Declare variables globally
 var player;
 var cursors;
