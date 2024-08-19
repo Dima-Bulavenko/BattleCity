@@ -38,6 +38,14 @@ function playerHit() {
     } 
 }
 
+function playEndGameSound() {
+    // Code to play the end game sound
+    // For example, you can use the Audio API to play an audio file
+    const audio = new Audio('/assets/sounds/game_over.mp3');
+    audio.play();
+}
+
+
 function endGame() {
     // Save the final score using the player's name and currentScore
     addHighScore(currentScore, "Player"); // Replace "Player" with the actual player name if needed
@@ -48,6 +56,9 @@ function endGame() {
 
     // Display the final score in the game over screen
     document.getElementById('final-score').textContent = `Final Score: ${currentScore}`;
+
+    playEndGameSound();
+
 
     // Set a timeout to reload the browser after 3 seconds (3000 milliseconds)
     setTimeout(() => {
