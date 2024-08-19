@@ -324,7 +324,7 @@ body {
     left: 50%;
     transform: translateX(-50%);
     font-size: 48px; 
-    color: #000; 
+    color: #ffffff; 
     text-shadow: 2px 2px 0 #000, /* Adds a shadow for 3D effect */
                  4px 4px 0 #00FF00, 
                  6px 6px 0 #000;
