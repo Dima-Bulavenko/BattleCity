@@ -140,11 +140,9 @@ function create() {
     // Add event listeners for keyboard input
     const escKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
     const enterKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ENTER);
-    const shiftKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SHIFT);
 
     escKey.on('down', handlePause.bind(this));
     enterKey.on('down', handleExitConfirmation.bind(this));
-    shiftKey.on('down', handleResume.bind(this));
     this.physics.add.collider(player, enemies, handleCollision, null, this);
     this.physics.add.collider(enemies, enemies, handleCollision, null, this);
     // Set up a timer to spawn enemy tanks every 7 seconds
@@ -235,9 +233,10 @@ function setBulletCollision() {
   this.physics.add.collider(bullets, wallLayer, bulletHitsWall, null, this);
   this.physics.add.collider(bullets, armorWallLayer, bulletHitsWall, null, this);
   this.physics.add.collider(bullets, eagleLayer, bulletHitsEagle, null, this);
-    //   // Add collision detection between bullets and tanks
-      this.physics.add.collider(bullets, player, bulletHitsPlayer, null, this);
-      this.physics.add.collider(bullets, enemies, bulletHitsEnemy, null, this);
+   
+  // Add collision detection between bullets and tanks
+    this.physics.add.collider(bullets, player, bulletHitsPlayer, null, this);
+    this.physics.add.collider(bullets, enemies, bulletHitsEnemy, null, this);
 }
 
 function bulletHitsPlayer(tank, bullet) {
@@ -656,7 +655,7 @@ function handlePause() {
         if (typeof Swal !== 'undefined') {
             Swal.fire({
                 title: 'Game Paused',
-                text: "Press Enter to confirm exit or Shift to resume.",
+                text: "Press Enter to confirm exit or ESC to resume.",
                 icon: 'info',
                 showCancelButton: false,
                 confirmButtonText: 'Confirm Exit',
