@@ -1,4 +1,3 @@
-document.addEventListener('DOMContentLoaded', () => {
 // Basic game parameters
 const canvasWidth = 800;
 const canvasHeight = 600;
@@ -615,7 +614,6 @@ function shootRandomly(tank) {
         args: [tank]
     });
 }
-});
 
 /**
  * Handle game pause
