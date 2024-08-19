@@ -25,10 +25,19 @@ const config = {
             debug: false // Set to true if you want to see the collision boxes
         }
     },
+    autoStart: false // Prevent scene from starting automatically
 };
 
 // Create the Phaser game instance
 const game = new Phaser.Game(config);
+
+// Add the scene but don't start it
+game.scene.add('default', {
+    preload: preload,
+    create: create,
+    update: update
+}, false);
+
 
 // Declare variables globally
 var player;
@@ -108,14 +117,32 @@ function create() {
   
   // Create player tank
   createTank.call(this, 304, 204, 'player');
-  createTank.call(this, 304, 204, 'enemy');
+  createTank.call(this, 304 + tileSize, 204, 'enemy');
 
   // Enable cursor keys for player movement
   cursors = this.input.keyboard.createCursorKeys();
-    fireKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+  fireKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
     // Enable cursor keys for player movement
     cursors = this.input.keyboard.createCursorKeys();
+
+    // Add event listeners for keyboard input
+    const escKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
+    const enterKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ENTER);
+    const shiftKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SHIFT);
+
+    escKey.on('down', handlePause.bind(this));
+    enterKey.on('down', handleExitConfirmation.bind(this));
+    shiftKey.on('down', handleResume.bind(this));
+    this.physics.add.collider(player, enemies, handleCollision, null, this);
+    this.physics.add.collider(enemies, enemies, handleCollision, null, this);
+    // Set up a timer to spawn enemy tanks every 7 seconds
+    this.time.addEvent({
+        delay: 7000, // (7 seconds)
+        callback: generateEnemy,
+        callbackScope: this,
+        loop: true
+    });
 }
 
 // Toggle the music on and off
@@ -131,28 +158,29 @@ function toggleMusic() {
 
 // Update the game state
 function update() {
-    if (cursors.left.isDown) {
-        moveTank('left', player);
-    } else if (cursors.right.isDown) {
-        moveTank('right', player);
-    } else if (cursors.up.isDown) {
-        moveTank('up', player);
-    } else if (cursors.down.isDown) {
-        moveTank('down', player);
-    } else {
-        player.setVelocity(0, 0); // Stop movement if no key is pressed
+    if (!this.gamePaused) {
+        if (cursors.left.isDown) {
+            moveTank('left', player);
+        } else if (cursors.right.isDown) {
+            moveTank('right', player);
+        } else if (cursors.up.isDown) {
+            moveTank('up', player);
+        } else if (cursors.down.isDown) {
+            moveTank('down', player);
+        } else {
+            player.setVelocity(0, 0);
+        }
+
+        if (Phaser.Input.Keyboard.JustDown(fireKey)) {
+            fireBullet.call(this, player);
+        }
+
+        if (enemies) {
+            enemies.children.iterate(function (enemy) {
+                moveTank(enemy.direction, enemy);
+            });
+        }
     }
-
-  // handle firing when spacebar is pressed
-  if (Phaser.Input.Keyboard.JustDown(fireKey)) {
-    fireBullet.call(this, player);
-  }
-
-  if (enemies) {
-    enemies.children.iterate(function (enemy) {
-      moveTank(enemy.direction, enemy)
-    });
-  }
 }
 
 function fireBullet(tank) {
@@ -243,6 +271,13 @@ function roundTo(value, step) {
 function moveTank(direction, tank) {
     let velocity = 70;
     let prefix = tank.type;
+
+    // Check for potential collision in the direction of movement
+    if (tank.collisionDirection === direction) {
+        tank.setVelocity(0, 0);
+        return;
+    }
+
     switch (direction) {
         case 'left':
             tank.y = roundTo(tank.y, 4);
@@ -284,6 +319,13 @@ function createTank(x, y, type) {
     if (type === 'player') {
         tank = createPlayerTank.call(this, x, y, type);
     } else {
+        if (player && x === player.x && y === player.y) {
+            x += tileSize; // Move one tile to the right
+            // Ensure x stays within world bounds
+            if (x + tileSize > mapX + mapWidth) {
+                x -= 2 * tileSize; // Move two tiles to the left if out of bounds
+            }
+        }
         tank = createEnemyTank.call(this, x, y, type);
     }
 
@@ -413,6 +455,75 @@ function setTankCollision(tank){
   this.physics.add.collider(tank, eagleLayer);
 }
 
+function handleCollision(tank1, tank2) {
+    const direction = getCollisionDirection(tank1, tank2);
+    tank1.collisionDirection = direction;
+    tank2.collisionDirection = getOppositeDirection(direction); 
+
+    // Clear existing timeout if it exists
+    if (tank1.collisionTimeout) {
+        clearTimeout(tank1.collisionTimeout);
+    }
+    if (tank2.collisionTimeout) {
+        clearTimeout(tank2.collisionTimeout);
+    }
+
+    // Set a new timeout to reset the collision direction
+    tank1.collisionTimeout = setTimeout(() => {
+        tank1.collisionDirection = null;
+        tank1.collisionTimeout = null;
+    }, 300); // Adjust the delay as needed
+
+    tank2.collisionTimeout = setTimeout(() => {
+        tank2.collisionDirection = null;
+        tank2.collisionTimeout = null;
+    }, 300); // Adjust the delay as needed
+}
+
+// Get collision direction to the first tank
+function getCollisionDirection(tank1, tank2) {
+    const dx = tank1.x - tank2.x;
+    const dy = tank1.y - tank2.y;
+
+    if (Math.abs(dx) > Math.abs(dy)) {
+        // Horizontal collision
+        if (dx > 0) {
+            return 'left';
+        } else {
+            return 'right';
+        }
+    } else {
+        // Vertical collision
+        if (dy > 0) {
+            return 'up';
+        } else {
+            return 'down';
+        }
+    }
+}
+
+// Get collision direction for the second tank
+function getOppositeDirection(direction) {
+    switch (direction) {
+        case 'left': return 'right';
+        case 'right': return 'left';
+        case 'up': return 'down';
+        case 'down': return 'up';
+    }
+}
+/**
+ * function that handles enemy and player tank collision
+ * **/ 
+function playerEnemyCollide(player, enemy) {
+    // Stop movement for both tanks
+    player.setVelocity(0);
+    
+    console.log("tanks collide");
+
+    if(enemy.active) {
+        enemy.setVelocity(0);
+    }
+}
 
 /**
  * Set tank animation
@@ -509,4 +620,82 @@ function shootRandomly(tank) {
         loop: false,
         args: [tank]
     });
+}
+
+/**
+ * Handle game pause
+ */
+function handlePause() {
+    if (!this.gamePaused) {
+        this.gamePaused = true;
+        this.scene.pause('default'); // Pause the specific scene
+        
+        if (typeof Swal !== 'undefined') {
+            Swal.fire({
+                title: 'Game Paused',
+                text: "Press Enter to confirm exit or Shift to resume.",
+                icon: 'info',
+                showCancelButton: false,
+                confirmButtonText: 'Confirm Exit',
+                cancelButtonText: 'Resume',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    handleExitConfirmation.call(this);
+                } else {
+                    handleResume.call(this);
+                }
+            });
+        } else {
+            console.error('SweetAlert (Swal) is not defined. Ensure SweetAlert library is included.');
+        }
+    }
+}
+
+function handleResume() {
+    if (this.gamePaused) {
+        this.gamePaused = false;
+        this.scene.resume('default'); // Resume the specific scene
+    }
+}
+
+function handleExitConfirmation() {
+    if (this.gamePaused) {
+        Swal.fire({
+            title: 'Are you sure you want to exit?',
+            text: "Your progress will not be saved.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, exit!',
+            cancelButtonText: 'Cancel'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                exitFullGame.call(this);
+            } else {
+                handleResume.call(this);
+            }
+        });
+    }
+}
+
+function exitFullGame() {
+    this.game.destroy(true);
+    Swal.fire(
+        'Exited!',
+        'You have exited the game.',
+        'success'
+    ).then(() => {
+        window.location.href ="index.html"
+    });
+}
+
+function generateEnemy() {
+    if (enemies.children.size >= 7) {
+        return;
+    }
+    positions = [[304, 204], [400, 204], [496, 292]]
+    const [x, y] = Phaser.Math.RND.pick(positions);
+    createTank.call(this, x, y, 'enemy');
 }

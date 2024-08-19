@@ -21,6 +21,14 @@ As a player I want to:
 
 ---
 
+## Project Management
+### Agile
+- An Agile approach has been applied in the creation and planning of this game
+- Github projects was used to manage the project's development cycles
+- GitHub projects was used to track user stories and implement them based on priority
+- GiHub projects was used to manage the team working sprints at each stage of development.
+- Find the link to the kanban board [here](https://github.com/users/Dima-Bulavenko/projects/7/views/1)
+
 ## Features
 
 | Features | Existing Features | Future Implementations | Screenshots |
@@ -107,6 +115,7 @@ The live link can be found here - *INSERT LINK*
 
 ### Code
 *REFERENCE ANY CODE COPIED FROM EXTERNAL SOURCES HERE*
+- [Sprite collision implementation](https://stackoverflow.com/questions/56729650/phaser3-detecting-sprite-collision)
 
 ### Collaborators
 
